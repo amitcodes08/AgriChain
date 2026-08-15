@@ -1,0 +1,147 @@
+# AgriChain Trace — full development environment.
+#
+#   docker compose up --build
+#
+# Brings up, in dependency order:
+#   mongo    → database
+#   ai       → FastAPI quality assessment
+#   chain    → Hardhat node with AgriSupplyChain deployed + seeded
+#   backend  → Express API (waits for mongo + ai to be healthy)
+#   frontend → Next.js farmer dashboard
+#
+# Everything is reachable on localhost: the dashboard on :3000, the API on :4000,
+# the AI service on :8000, the chain RPC on :8545 and MongoDB on :27017.
+
+name: agrichain
+
+services:
+  # ---- Database ------------------------------------------------------------
+  mongo:
+    image: mongo:7
+    container_name: agrichain-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      # `mongosh --eval` is the supported readiness probe on Mongo 6+.
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks: [agrinet]
+
+  # ---- AI quality assessment ----------------------------------------------
+  ai:
+    build:
+      context: ./ai-service
+    container_name: agrichain-ai
+    restart: unless-stopped
+    environment:
+      MAX_UPLOAD_BYTES: "8388608"
+      QUALITY_THRESHOLD: "60"
+      LOG_LEVEL: INFO
+      CORS_ORIGINS: "*"
+    ports:
+      - "8000:8000"
+    networks: [agrinet]
+
+  # ---- Local Polygon-compatible chain --------------------------------------
+  chain:
+    build:
+      context: ./contracts
+    container_name: agrichain-chain
+    restart: unless-stopped
+    environment:
+      RPC_URL: http://127.0.0.1:8545
+      # Set to "true" to boot a bare chain with no demo batches on it.
+      SKIP_SEED: "false"
+    ports:
+      - "8545:8545"
+    volumes:
+      # Deployment artefacts (address + ABI) land on the host so the backend and
+      # frontend can be pointed at the contract without copying anything by hand.
+      - ./contracts/deployments:/app/deployments
+    networks: [agrinet]
+
+  # ---- API -----------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+    container_name: agrichain-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      LOG_LEVEL: info
+      MONGO_URI: mongodb://mongo:27017/agrichain
+      AI_SERVICE_URL: http://ai:8000
+      AI_REQUEST_TIMEOUT_MS: "15000"
+      CORS_ORIGINS: http://localhost:3000
+      UPLOAD_MAX_BYTES: "8388608"
+      RPC_URL: http://chain:8545
+      CHAIN_ID: "31337"
+      # Chain writes stay off until you supply an address — the API is fully
+      # functional off-chain, and `chain.enabled` is reported in every response.
+      # After `docker compose up`, read the address from
+      # contracts/deployments/localhost.json and set it here, then:
+      #   docker compose up -d --force-recreate backend
+      CONTRACT_ADDRESS: "${CONTRACT_ADDRESS:-}"
+      BACKEND_PRIVATE_KEY: "${BACKEND_PRIVATE_KEY:-}"
+      # The chain container writes its address + ABI here on every boot, so the
+      # backend reads the live artefact instead of one baked into the image.
+      CONTRACT_ABI_PATH: /app/chain/localhost.json
+    volumes:
+      - ./contracts/deployments:/app/chain:ro
+    ports:
+      - "4000:4000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      ai:
+        condition: service_healthy
+    networks: [agrinet]
+
+  # ---- Dashboard -----------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Baked in at build time — the browser calls the API directly, so this
+        # must be the host-visible URL, not the compose service name.
+        NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL:-http://localhost:4000}"
+    container_name: agrichain-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [agrinet]
+
+  # ---- One-shot: seed the database ----------------------------------------
+  # Not started by `up` (it belongs to the `tools` profile). Run it explicitly:
+  #   docker compose run --rm seed
+  seed:
+    build:
+      context: ./backend
+    container_name: agrichain-seed
+    profiles: ["tools"]
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/agrichain
+      AI_SERVICE_URL: http://ai:8000
+    command: ["node", "dist/scripts/seed.js"]
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks: [agrinet]
+
+volumes:
+  mongo-data:
+
+networks:
+  agrinet:
+    driver: bridge

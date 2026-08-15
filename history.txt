@@ -1,0 +1,1942 @@
+╭─── Claude Code v2.1.220 ─────────────────────────────────────────────────────╮
+│                                │ Tips for getting started                    │
+│          Welcome back!         │ Run /init to create a CLAUDE.md file with … │
+│                                │ ─────────────────────────────────────────── │
+│             ▐▛███▜▌            │ What's new                                  │
+│            ▝▜█████▛▘           │ Bug fixes and reliability improvements      │
+│              ▘▘ ▝▝             │ Added gateway spend-limit support to Claud… │
+│                                │ Added a workspace trust prompt to `claude … │
+│   Opus 5 · API Usage Billing   │ /release-notes for more                     │
+│     ~/Desktop/AgriProject      │                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+ ⚠ Both ANTHROPIC_AUTH_TOKEN and ANTHROPIC_API_KEY set · auth may not work as expected
+   · to use ANTHROPIC_AUTH_TOKEN: Unset the ANTHROPIC_API_KEY environment variable, or claude /logout then say "No" to the API key approval before login.
+   · to use ANTHROPIC_API_KEY: Unset the ANTHROPIC_AUTH_TOKEN environment variable.
+
+⏺ Now the cartoon icon set — the heart of the visual language.(tool_use)
+  name=Write id=toolu_01SUeYo9phSTh5uCyLLPRVe9 input={"content":"/\n * Cartoon 
+  icon set for AgriChain Trace.\n \n * Design rules, applied consistently across
+  every icon:\n *   • Thick, rounded strokes and flat fills — 
+  vector-illustration, not line-art.\n *   • Each icon is drawn mid-action: the 
+  tractor throws dust, the seed bursts\n *     with sunrays, the handshake has 
+  motion ticks. That is what makes them read\n *     as "animated" while sitting
+  perfectly still.\n *   • Motion accents live in a dedicated group so they can
+  be styled or hidden\n *     without touching the subject.\n *   • Everything 
+  sits on a 48×48 grid and inherits currentColor only for\n *     optional 
+  accents; the palette is baked in so icons stay on-brand.\n /\n\nexport 
+  interface IconProps {\n  className?: string;\n  title?: string;\n}\n\nconst 
+  base = "shrink-0";\n\nfunction svgProps(className?: string) {\n  return {\n   
+  viewBox: "0 0 48 48",\n    className: ${base} ${className ?? \"h-10 
+  w-10\"},\n    xmlns: "http://www.w3.org/2000/svg\",\n    role: "img" as 
+  const,\n  };\n}\n\n/ 
+  -------------------------------------------------------------------------- 
+  /\n/ Brand                                                                    
+   /\n/ 
+  -------------------------------------------------------------------------- 
+  /\n\n/ Logo: a red barn with a leaf sprouting from the roof. /\nexport 
+  function BarnLeafIcon({ className, title = "AgriChain Trace" }: IconProps) {\n
+   return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cellipse cx="24" 
+  cy="42" rx="16" ry="3" fill="#145127" opacity="0.14" /\u003e\n      \u003cpath
+  d="M8 22 24 12l16 10v18a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V22Z" fill="#b36e3f" 
+  /\u003e\n      \u003cpath d="M8 22 24 12l16 10-2.4 3L24 16.6 10.4 25 8 22Z" 
+  fill="#955636" /\u003e\n      \u003crect x="18" y="28" width="12" height="14" 
+  rx="1.6" fill="#fbf7f1" /\u003e\n      \u003cpath d="M18 32h12M24 28v14" 
+  stroke="#b36e3f" strokeWidth="1.8" strokeLinecap="round" /\u003e\n      {/ 
+  leaf sprouting from the ridge /}\n      \u003cpath d="M24 12c0-4.4 3-7.6 
+  7.2-8.4.8 4.6-1.6 8.6-5.6 9.8" fill="#22c34c" /\u003e\n      \u003cpath 
+  d="M25.6 12.2c1.2-3 3.2-5 5.6-6" stroke="#145127" strokeWidth="1.4" 
+  strokeLinecap="round" fill="none" /\u003e\n      \u003ccircle cx="24" cy="12" 
+  r="2" fill="#16a03a" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/ 
+  -------------------------------------------------------------------------- 
+  /\n/ Module icons                                                             
+   /\n/ 
+  -------------------------------------------------------------------------- 
+  /\n\n/* Register batch: a hand lowering a seed into soil, sunburst behind it. 
+  /\nexport function HandPlantingSeedIcon({ className, title = "Register a new 
+  batch" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cg 
+  opacity="0.9"\u003e\n        \u003cpath d="M24 5v3.6M31.5 7.6 30 10.8M16.5 7.6
+  18 10.8M36 13.4l-2.8 1.8M12 13.4l2.8 1.8" stroke="#ffc720" strokeWidth="2.4" 
+  strokeLinecap="round" /\u003e\n      \u003c/g\u003e\n      \u003cpath d="M6 
+  34h36v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-6Z" fill="#955636" /\u003e\n      
+  \u003cpath d="M6 34h36v2.6H6z" fill="#b36e3f" /\u003e\n      {/ seed dropping 
+  /}\n      \u003cellipse cx="24" cy="27.5" rx="3.1" ry="4.1" fill="#dd7d02" 
+  transform="rotate(-12 24 27.5)" /\u003e\n      \u003cpath d="M22.6 25.6c.8-.9 
+  1.9-1.4 3-1.5" stroke="#fff6c6" strokeWidth="1.3" strokeLinecap="round" 
+  fill="none" /\u003e\n      {/ hand */}\n      \u003cpath\n        d="M14 
+  14.5c1.6-1.4 3.6-1 4.6.6l2.6 4.2 1.4-1.6c1.2-1.4 3.3-1.2 4.2.4l3.2 5.6c1.1 2 
+  .5 4.4-1.4 5.6l-3.3 2c-2.4 1.5-5.6.9-7.2-1.4l-4.9-6.9c-1.3-1.9-1-4.4.8-5.9Z"\n
+         fill="#ffdb4a"\n      /\u003e\n      \u003cpath d="M18.6 21.4 21 
+  25M22.6 19.6l2.6 4" stroke="#dd7d02" strokeWidth="1.5" strokeLinecap="round" 
+  /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/ Active batches: a plant growing in
+  a furrowed field. /\nexport function GrowingPlantFieldIcon({ className, title
+  = "Active crop batches" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cpath d="M4 32h40l-2.5 
+  8a2 2 0 0 1-1.9 1.4H8.4A2 2 0 0 1 6.5 40L4 32Z" fill="#955636" /\u003e\n      
+  \u003cpath d="M4 32h40l-.7 2.2H4.7L4 32Z" fill="#b36e3f" /\u003e\n      
+  \u003cpath d="M12 36.4h6M22 36.4h6M32 36.4h5" stroke="#794631" 
+  strokeWidth="1.6" strokeLinecap="round" /\u003e\n      \u003cpath d="M24 
+  32V17" stroke="#157e31" strokeWidth="3" strokeLinecap="round" /\u003e\n      
+  \u003cpath d="M24 22c-4.6.4-7.6-2.2-8.4-6.6 4.4-1 7.8 1.4 8.4 6.6Z" 
+  fill="#22c34c" /\u003e\n      \u003cpath d="M24 19c4.6-.6 7.4-3.6 
+  7.6-8.2-4.6.2-7.4 3-7.6 8.2Z" fill="#4ade6f" /\u003e\n      \u003ccircle 
+  cx="24" cy="13.4" r="2.6" fill="#16a03a" /\u003e\n      {/ growth ticks /}\n  
+     \u003cpath d="M34 20.5c1.6-1 2.6-2.6 2.8-4.5M38 26c1.8-.4 3.2-1.5 4-3" 
+  stroke="#86efa0" strokeWidth="2" strokeLinecap="round" fill="none" /\u003e\n  
+   \u003c/svg\u003e\n  );\n}\n\n/* Wallet: a basket spilling coins and produce.
+  /\nexport function CoinBasketIcon({ className, title = "Farmer wallet" }: 
+  IconProps) {\n  return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      {/ produce peeking over the
+  rim /}\n      \u003ccircle cx="18" cy="20" r="5" fill="#f9a607" /\u003e\n     
+  \u003ccircle cx="29" cy="19" r="4.4" fill="#22c34c" /\u003e\n      \u003cpath
+  d="M29 14.6c.4-1.6 1.6-2.6 3.2-2.8" stroke="#157e31" strokeWidth="1.6" 
+  strokeLinecap="round" fill="none" /\u003e\n      {/ coins, mid-bounce /}\n    
+   \u003ccircle cx="37" cy="14" r="4.2" fill="#ffc720" stroke="#dd7d02" 
+  strokeWidth="1.4" /\u003e\n      \u003cpath d="M37 11.6v4.8M35.6 12.8h2.8" 
+  stroke="#94430c" strokeWidth="1.3" strokeLinecap="round" /\u003e\n      
+  \u003ccircle cx="11" cy="14.5" r="3.4" fill="#ffdb4a" stroke="#dd7d02" 
+  strokeWidth="1.2" /\u003e\n      {/ sparkle accents = "coins are landing" /}\n
+       \u003cpath d="M42 20.5l1.4 1.4M6 20l-1.4 1.4M24 8.5V6" stroke="#ffec88" 
+  strokeWidth="2" strokeLinecap="round" /\u003e\n      {/ basket /}\n      
+  \u003cpath d="M7 24h34l-3.4 14.6a2.4 2.4 0 0 1-2.3 1.8H12.7a2.4 2.4 0 0 
+  1-2.3-1.8L7 24Z" fill="#cc9a68" /\u003e\n      \u003cpath d="M7 24h34l-.7 
+  3H7.7L7 24Z" fill="#dcba93" /\u003e\n      \u003cpath d="M14 28.5l1.8 9M24 
+  28.5v9M34 28.5l-1.8 9" stroke="#955636" strokeWidth="1.8" 
+  strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/*
+  Traceability map: a globe with a delivery truck and a leaf. /\nexport function
+  GlobeTruckLeafIcon({ className, title = "Traceability map" }: IconProps) {\n 
+  return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003ccircle cx="24" cy="24"
+  r="17" fill="#7dcbfc" /\u003e\n      \u003cpath d="M9 19h30M9 29h30" 
+  stroke="#bae2fd" strokeWidth="1.8" /\u003e\n      \u003cpath d="M24 7c4.4 5 
+  4.4 29 0 34M24 7c-4.4 5-4.4 29 0 34" stroke="#bae2fd" strokeWidth="1.8" 
+  fill="none" /\u003e\n      {/ landmasses /}\n      \u003cpath d="M13 17c3-2 
+  6-1.4 8 .6 1.6 1.6.6 4-1.6 4.4-3 .6-6-1.4-6.4-5Z" fill="#4ade6f" /\u003e\n    
+   \u003cpath d="M28 28c3.4-1.4 6.6 0 7.6 2.6.8 2-1.2 3.8-3.4 
+  3.2-2.6-.6-4.4-2.8-4.2-5.8Z" fill="#22c34c" /\u003e\n      {/ truck on the
+  equator, dust behind it /}\n      \u003cg\u003e\n        \u003crect x="20" 
+  y="20.5" width="11" height="6" rx="1.4" fill="#fbf7f1" /\u003e\n        
+  \u003cpath d="M31 22.4h3.2l2.4 2.8v1.3H31v-4.1Z" fill="#ffc720" /\u003e\n     
+    \u003ccircle cx="23.5" cy="27.2" r="2" fill="#3e3833" /\u003e\n        
+  \u003ccircle cx="33.5" cy="27.2" r="2" fill="#3e3833" /\u003e\n        
+  \u003cpath d="M18.5 22.5h-3M17 25.4h-3.4" stroke="#f0f8ff" strokeWidth="2" 
+  strokeLinecap="round" /\u003e\n      \u003c/g\u003e\n      {/ leaf badge /}\n 
+      \u003cpath d="M36 10c4.2-.6 6.8 1.8 7 6-4 1-6.6-1.2-7-6Z" fill="#16a03a" 
+  /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/
+  --------------------------------------------------------------------------
+  /\n/ Status icons
+   /\n/
+  --------------------------------------------------------------------------
+  /\n\n/* Planted: a seedling breaking through soil. /\nexport function 
+  SeedlingIcon({ className, title = "Planted" }: IconProps) {\n  return (\n    
+  \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cpath d="M9 33h30l-1.8 
+  7a2 2 0 0 1-2 1.6H12.8a2 2 0 0 1-2-1.6L9 33Z" fill="#955636" /\u003e\n      
+  \u003cpath d="M9 33h30l-.5 2H9.5L9 33Z" fill="#b36e3f" /\u003e\n      
+  \u003cpath d="M24 33V19" stroke="#157e31" strokeWidth="3.2" 
+  strokeLinecap="round" /\u003e\n      \u003cpath d="M24 24c-4.2 0-6.8-2.4-7-6.6
+  4.2-.6 7 1.8 7 6.6Z" fill="#22c34c" /\u003e\n      \u003cpath d="M24 
+  21.5c4.2-.2 6.8-2.8 6.8-7-4.2.2-6.8 2.8-6.8 7Z" fill="#4ade6f" /\u003e\n      
+  \u003cpath d="M24 12.5V8M18.5 12l-1.8-2.6M29.5 12l1.8-2.6" stroke="#ffdb4a" 
+  strokeWidth="2.2" strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  
+  );\n}\n\n/* AI verified: a friendly robot inspecting a leaf through a
+  magnifier. /\nexport function RobotInspectIcon({ className, title = "AI 
+  quality verified" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cpath d="M24 7v3.5" 
+  stroke="#7d715f" strokeWidth="2" strokeLinecap="round" /\u003e\n      
+  \u003ccircle cx="24" cy="6" r="2.2" fill="#ffc720" /\u003e\n      \u003crect 
+  x="11" y="11" width="26" height="20" rx="6" fill="#bae2fd" /\u003e\n      
+  \u003crect x="14.5" y="15" width="19" height="11" rx="4" fill="#075085" 
+  /\u003e\n      \u003ccircle cx="20" cy="20.5" r="2.3" fill="#7dcbfc" /\u003e\n
+       \u003ccircle cx="28" cy="20.5" r="2.3" fill="#7dcbfc" /\u003e\n      
+  \u003cpath d="M20.5 24.5h7" stroke="#38b0f8" strokeWidth="1.6" 
+  strokeLinecap="round" /\u003e\n      \u003crect x="15" y="31" width="18" 
+  height="6" rx="3" fill="#7dcbfc" /\u003e\n      {/ leaf under inspection /}\n 
+      \u003cpath d="M31 36c4.4-1 7.4 1 8 5.4-4.4 1.2-7.4-.8-8-5.4Z" 
+  fill="#22c34c" /\u003e\n      {/ magnifier /}\n      \u003ccircle cx="34" 
+  cy="33" r="6.4" fill="#f0f8ff" fillOpacity="0.55" stroke="#dd7d02" 
+  strokeWidth="2.6" /\u003e\n      \u003cpath d="M38.8 37.8 43 42" 
+  stroke="#dd7d02" strokeWidth="3" strokeLinecap="round" /\u003e\n      
+  \u003cpath d="M31.4 30.6a4 4 0 0 1 2.2-1.4" stroke="#fff" strokeWidth="1.6" 
+  strokeLinecap="round" fill="none" /\u003e\n      {/ scan ticks /}\n      
+  \u003cpath d="M8 20h-3M8 26H5.4" stroke="#86efa0" strokeWidth="2" 
+  strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Listed: a
+  market storefront with a striped awning. /\nexport function StorefrontIcon({ 
+  className, title = "Listed on market" }: IconProps) {\n  return (\n    
+  \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="9" y="20" 
+  width="30" height="21" rx="2.4" fill="#f5ecdf" /\u003e\n      \u003cpath d="M7
+  12h34l3 8H4l3-8Z" fill="#22c34c" /\u003e\n      \u003cpath d="M12.6 
+  12h6.2l-1.6 8h-6.2l1.6-8ZM25.2 12h6.2l1.6 8h-6.2l-1.6-8Z" fill="#fbf7f1" 
+  /\u003e\n      \u003crect x="19" y="28" width="10" height="13" rx="1.6" 
+  fill="#b36e3f" /\u003e\n      \u003ccircle cx="26.6" cy="34.6" r="1" 
+  fill="#ffdb4a" /\u003e\n      \u003crect x="12.5" y="24.5" width="5.5" 
+  height="5" rx="1.2" fill="#7dcbfc" /\u003e\n      \u003crect x="30" y="24.5" 
+  width="5.5" height="5" rx="1.2" fill="#7dcbfc" /\u003e\n      {/ "open for
+  business" sparkles /}\n      \u003cpath d="M24 8.5V5.5M15 9l-1.4-2.4M33 
+  9l1.4-2.4" stroke="#ffc720" strokeWidth="2.2" strokeLinecap="round" /\u003e\n 
+    \u003c/svg\u003e\n  );\n}\n\n/* Sold: a handshake with a coin above it.
+  /\nexport function HandshakeCoinIcon({ className, title = "Sold" }: IconProps)
+  {\n  return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003ccircle cx="24" cy="13"
+  r="7" fill="#ffc720" stroke="#dd7d02" strokeWidth="2" /\u003e\n      
+  \u003cpath d="M24 8.6v8.8M21.6 10.6h4.2a1.9 1.9 0 0 1 0 3.8h-3.6a1.9 1.9 0 0 0
+  0 3.8h4.2" stroke="#94430c" strokeWidth="1.8" strokeLinecap="round" 
+  fill="none" /\u003e\n      {/ clasped hands /}\n      \u003cpath d="M5 
+  28.5l7-4.4 8 4.6 4-1.6 4 1.6 8-4.6 7 4.4-6.6 8.6-6-3-4.4 2.4a4 4 0 0 1-3.8 
+  0L11.6 34l-6 3L5 28.5Z" fill="#ffdb4a" /\u003e\n      \u003cpath d="M20 28.7l4
+  2.3 4-2.3" stroke="#dd7d02" strokeWidth="2" strokeLinecap="round" 
+  strokeLinejoin="round" fill="none" /\u003e\n      {/ impact ticks = the deal
+  just closed /}\n      \u003cpath d="M13 20.5l-2-2.6M35 20.5l2-2.6M24 42v2.5" 
+  stroke="#86efa0" strokeWidth="2.2" strokeLinecap="round" /\u003e\n    
+  \u003c/svg\u003e\n  );\n}\n\n/* In transit: a truck throwing up dust.
+  /\nexport function DeliveryTruckIcon({ className, title = "On the way to 
+  buyer" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="6" y="16" 
+  width="22" height="15" rx="2.4" fill="#7dcbfc" /\u003e\n      \u003cpath 
+  d="M28 20h6.6l5.4 6v5H28v-11Z" fill="#ffc720" /\u003e\n      \u003cpath 
+  d="M30.5 22.4h3.6l3 3.4h-6.6v-3.4Z" fill="#f0f8ff" /\u003e\n      \u003crect 
+  x="6" y="29" width="34" height="3" rx="1.4" fill="#0275c7" /\u003e\n      
+  \u003ccircle cx="14" cy="34" r="4.2" fill="#3e3833" /\u003e\n      
+  \u003ccircle cx="14" cy="34" r="1.7" fill="#b4aa9d" /\u003e\n      
+  \u003ccircle cx="34" cy="34" r="4.2" fill="#3e3833" /\u003e\n      
+  \u003ccircle cx="34" cy="34" r="1.7" fill="#b4aa9d" /\u003e\n      \u003cpath 
+  d="M12 20.5h9M12 24.5h6" stroke="#f0f8ff" strokeWidth="2" 
+  strokeLinecap="round" /\u003e\n      {/ dust clouds trailing behind /}\n      
+  \u003cg opacity="0.85"\u003e\n        \u003ccircle cx="5" cy="37" r="2.6" 
+  fill="#e8e5e0" /\u003e\n        \u003ccircle cx="9.5" cy="39.5" r="1.9" 
+  fill="#e8e5e0" /\u003e\n        \u003cpath d="M4 26.5H1M4.5 22H2" 
+  stroke="#d2ccc3" strokeWidth="2.2" strokeLinecap="round" /\u003e\n      
+  \u003c/g\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Cancelled: a produce crate
+  tipped over. /\nexport function CancelledCrateIcon({ className, title = 
+  "Cancelled" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="10" y="20" 
+  width="24" height="18" rx="2.4" fill="#cc9a68" transform="rotate(-9 22 29)" 
+  /\u003e\n      \u003cpath d="M11 26.5l23-3.6M13 33l23-3.6" stroke="#955636" 
+  strokeWidth="2" strokeLinecap="round" /\u003e\n      \u003ccircle cx="36" 
+  cy="14" r="7" fill="#f9a607" /\u003e\n      \u003cpath d="M33.4 11.4l5.2 
+  5.2M38.6 11.4l-5.2 5.2" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" 
+  /\u003e\n      \u003cpath d="M7 41h20" stroke="#d2ccc3" strokeWidth="2.4" 
+  strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/
+  --------------------------------------------------------------------------
+  /\n/ Utility icons
+   /\n/
+  --------------------------------------------------------------------------
+  /\n\n/* Wallet connection pill icon. /\nexport function WalletPlugIcon({ 
+  className, title = "Wallet" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="6" y="13" 
+  width="32" height="23" rx="5" fill="#16a03a" /\u003e\n      \u003cpath d="M6 
+  19c0-3.3 2.7-6 6-6h20l-4 6H6Z" fill="#22c34c" /\u003e\n      \u003crect x="26"
+  y="21" width="16" height="9" rx="4.5" fill="#ffdb4a" /\u003e\n      
+  \u003ccircle cx="33.5" cy="25.5" r="2.4" fill="#dd7d02" /\u003e\n    
+  \u003c/svg\u003e\n  );\n}\n\n/* Camera used on the photo drop zone. /\nexport 
+  function CameraIcon({ className, title = "Add a photo" }: IconProps) {\n  
+  return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="5" y="15" 
+  width="38" height="25" rx="5" fill="#0275c7" /\u003e\n      \u003cpath d="M17 
+  15l2.6-4.4a2 2 0 0 1 1.7-1h5.4a2 2 0 0 1 1.7 1L31 15H17Z" fill="#38b0f8" 
+  /\u003e\n      \u003ccircle cx="24" cy="27.5" r="8" fill="#bae2fd" /\u003e\n  
+     \u003ccircle cx="24" cy="27.5" r="4.4" fill="#075085" /\u003e\n      
+  \u003ccircle cx="21.6" cy="25.4" r="1.4" fill="#f0f8ff" /\u003e\n      
+  \u003ccircle cx="37" cy="20.5" r="1.8" fill="#ffdb4a" /\u003e\n      
+  \u003cpath d="M44 12.5l2.2-1.4M44 17h2.4" stroke="#ffec88" strokeWidth="2" 
+  strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Map pin
+  used on the traceability map. /\nexport function MapPinIcon({ className, title
+  = "Location" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cpath d="M24 4c8 0 14 6
+  14 13.6C38 27 26.6 41 24 44c-2.6-3-14-17-14-26.4C10 10 16 4 24 4Z" 
+  fill="#22c34c" /\u003e\n      \u003ccircle cx="24" cy="17.5" r="6" 
+  fill="#f0fdf2" /\u003e\n      \u003ccircle cx="24" cy="17.5" r="2.8" 
+  fill="#157e31" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Trophy-ish quality
+  badge used next to scores. /\nexport function QualityBadgeIcon({ className, 
+  title = "Quality score" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003ccircle cx="24" cy="21"
+  r="13" fill="#ffc720" /\u003e\n      \u003ccircle cx="24" cy="21" r="9.4" 
+  fill="#ffdb4a" stroke="#dd7d02" strokeWidth="1.8" /\u003e\n      \u003cpath 
+  d="m24 15.4 1.9 3.9 4.3.6-3.1 3 .7 4.2-3.8-2-3.8 2 .7-4.2-3.1-3 4.3-.6L24 
+  15.4Z" fill="#94430c" /\u003e\n      \u003cpath d="m17 32-2.6 10 9.6-4.4 9.6 
+  4.4L31 32" fill="#22c34c" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Small
+  chain-link badge shown when a batch is minted on chain. /\nexport function 
+  ChainLinkIcon({ className, title = "Recorded on chain" }: IconProps) {\n  
+  return (\n    \u003csvg {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003crect x="5" y="18" 
+  width="20" height="12" rx="6" fill="#0275c7" /\u003e\n      \u003crect x="23" 
+  y="18" width="20" height="12" rx="6" fill="#38b0f8" /\u003e\n      \u003cpath 
+  d="M17 24h14" stroke="#f0f8ff" strokeWidth="3" strokeLinecap="round" /\u003e\n
+     \u003c/svg\u003e\n  );\n}\n\n/* Empty-state scarecrow — friendlier than a
+  blank panel. /\nexport function ScarecrowIcon({ className, title = "Nothing 
+  here yet" }: IconProps) {\n  return (\n    \u003csvg 
+  {...svgProps(className)}\u003e\n      
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003cpath d="M24 26v16" 
+  stroke="#955636" strokeWidth="3.4" strokeLinecap="round" /\u003e\n      
+  \u003cpath d="M10 29h28" stroke="#b36e3f" strokeWidth="3.4" 
+  strokeLinecap="round" /\u003e\n      \u003ccircle cx="24" cy="17" r="9" 
+  fill="#ffdb4a" /\u003e\n      \u003cpath d="M15 12h18l-1.6-3.4a2 2 0 0 
+  0-1.8-1.2H18.4a2 2 0 0 0-1.8 1.2L15 12Z" fill="#cc9a68" /\u003e\n      
+  \u003ccircle cx="20.6" cy="17" r="1.7" fill="#3e3833" /\u003e\n      
+  \u003ccircle cx="27.4" cy="17" r="1.7" fill="#3e3833" /\u003e\n      
+  \u003cpath d="M20.6 21.4c1.9 1.6 4.9 1.6 6.8 0" stroke="#3e3833" 
+  strokeWidth="1.7" strokeLinecap="round" fill="none" /\u003e\n      \u003cpath 
+  d="M11 29l-2.6 4M37 29l2.6 4" stroke="#ffc720" strokeWidth="2.6" 
+  strokeLinecap="round" /\u003e\n    \u003c/svg\u003e\n  );\n}\n\n/* Sun used in
+  the page backdrop. */\nexport function SunIcon({ className, title =
+  "Sunshine" }: IconProps) {\n  return (\n    \u003csvg
+  {...svgProps(className)}\u003e\n
+  \u003ctitle\u003e{title}\u003c/title\u003e\n      \u003ccircle cx="24" cy="24"
+  r="11" fill="#ffc720" /\u003e\n      \u003ccircle cx="24" cy="24" r="7.5"
+  fill="#ffdb4a" /\u003e\n      \u003cg stroke="#ffc720" strokeWidth="3"
+  strokeLinecap="round"\u003e\n        \u003cpath d="M24 4v5M24 39v5M44 24h-5M9
+  24H4M38 10l-3.5 3.5M13.5 34.5 10 38M38 38l-3.5-3.5M13.5 13.5 10 10" /\u003e\n
+      \u003c/g\u003e\n    \u003c/svg\u003e\n  );\n}\n","file_path":"/Users/amit
+  gupta/Desktop/AgriProject/frontend/components/icons/CartoonIcons.tsx"}
+
+✻ Baked for 3m 50s
+
+⏺ Background command "Install frontend dependencies" completed (exit code 0)
+  ⎿  Read frontend/postcss.config.mjs (9 lines)
+  ⎿  Read frontend/next.config.ts (13 lines)
+  ⎿  Read frontend/tsconfig.json (22 lines)
+  ⎿  Read frontend/tailwind.config.ts (131 lines)
+  ⎿  Read frontend/package.json (30 lines)
+
+  Searched for 2 patterns, read 1 file, listed 1 directory, ran 2 shell commands (ctrl+o to expand)
+
+⏺ Config is in place and dependencies installed. Now the source tree — starting
+  with the icon set and the shared lib.
+
+⏺ Write(frontend/components/icons/CartoonIcons.tsx)
+  ⎿  Wrote 398 lines to frontend/components/icons/CartoonIcons.tsx
+       1 /**
+       3  *
+       4  * Design rules, applied consistently across every icon:
+         on, not line art.
+       6  *   • Each icon is drawn *mid-action*: the tractor throws dust,
+       7  *     with sunrays, the handshake has impact ticks. That is wha
+         t makes them read
+       9  *   • Everything sits on a 48×48 grid with the brand palette ba
+         ked in, so an
+         ce.
+     … +515 lines (ctrl+o to expand)
+
+⏺ Now the shared types, status vocabulary, and the API client.
+
+⏺ Write(frontend/lib/types.ts)
+  ⎿  Wrote 186 lines to frontend/lib/types.ts
+       1 /**
+       3  *
+       4  * These mirror `backend/src/models` and `backend/src/domain/con
+         stants.ts`. They
+         ays buildable on
+       6  * its own, but the status list is ordered identically to the ba
+       7  * Solidity enum) — that ordering is what the timeline component
+          relies on.
+       8  */
+      10 export const BATCH_STATUSES = [
+     … +183 lines (ctrl+o to expand)
+
+⏺ Write(frontend/lib/api.ts)
+  ⎿  Wrote 187 lines to frontend/lib/api.ts
+       1 import type {
+       2   Batch,
+       3   BatchStats,
+       4   BatchStatus,
+       5   Farmer,
+       6   Paged,
+       7   RegisterBatchInput,
+       8   RegisterBatchResult,
+       9   TraceMap,
+      10   WalletSummary,
+     … +214 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Now the status vocabulary and formatting helpers the UI shares.
+
+⏺ Write(frontend/lib/status.ts)
+  ⎿  Wrote 179 lines to frontend/lib/status.ts
+       1 import type { ComponentType } from "react";
+       2 import {
+       3   CancelledCrateIcon,
+       4   DeliveryTruckIcon,
+       5   HandshakeCoinIcon,
+       6   RobotInspectIcon,
+       7   SeedlingIcon,
+       8   StorefrontIcon,
+       9   type IconProps,
+      10 } from "@/components/icons/CartoonIcons";
+     … +191 lines (ctrl+o to expand)
+
+⏺ Now the global stylesheet and root layout.
+
+⏺ Write(frontend/app/globals.css)
+  ⎿  Wrote 106 lines to frontend/app/globals.css
+       1 @tailwind base;
+       2 @tailwind components;
+       3 @tailwind utilities;
+       4 
+       5 @layer base {
+       6   :root {
+       7     color-scheme: light;
+       8   }
+       9 
+      10   body {
+     … +117 lines (ctrl+o to expand)
+
+⏺ Write(frontend/app/layout.tsx)
+  ⎿  Wrote 41 lines to frontend/app/layout.tsx
+       1 import type { Metadata, Viewport } from "next";
+       2 import { Baloo_2, Nunito } from "next/font/google";
+       3 import "./globals.css";
+       5 /**
+       6  * Two rounded faces: Nunito for body copy (highly legible at sm
+         all sizes) and
+       7  * Baloo 2 for headings, whose heavy rounded weights match the i
+       8  */
+       9 const nunito = Nunito({
+      10   subsets: ["latin"],
+     … +37 lines (ctrl+o to expand)
+
+⏺ Now the shared UI primitives, then the header.
+
+⏺ Write(frontend/components/ui/Panel.tsx)
+  ⎿  Wrote 125 lines to frontend/components/ui/Panel.tsx
+       1 import type { ComponentType, ReactNode } from "react";
+         ;
+       3 
+       4 /**
+         d icon in a soft
+       6  * medallion, a heading, a one-line explanation in plain languag
+       7  * optional action slot. Consistency here is what makes the dash
+         board learnable
+       8  * after seeing one panel.
+      10 export interface PanelProps {
+     … +132 lines (ctrl+o to expand)
+
+⏺ Write(frontend/components/ui/StatusPill.tsx)  ⎿  Wrote 36 lines to frontend/components/ui/StatusPill.tsx
+       1 import { STATUS_META } from "@/lib/status";
+       2 import type { BatchStatus } from "@/lib/types";
+       3 
+       5  * The status pill: icon + label, in the colour family that stat
+         us owns. Because
+       6  * every status has both a distinct colour *and* a distinct illu
+         stration, it
+       8  */
+       9 export function StatusPill({
+      10   status,
+     … +31 lines (ctrl+o to expand)
+
+⏺ The task list is accurate — #4 is in progress. Continuing with the header and
+  dashboard modules.
+
+⏺ Write(frontend/components/layout/Header.tsx)
+  ⎿  Wrote 88 lines to frontend/components/layout/Header.tsx
+       1 "use client";
+       2 
+         nts/icons/CartoonIcons";
+       4 import { shortenAddress } from "@/lib/status";
+       5 
+       7  * The header carries three things a farmer needs at a glance: w
+         ho they are
+       8  * looking at (the brand), whether the app can act on their beha
+       9  * pill), and where the produce lives (the network badge).
+      10  *
+     … +103 lines (ctrl+o to expand)
+
+⏺ Write(frontend/components/dashboard/RegisterBatchForm.tsx)
+  ⎿  Wrote 403 lines to frontend/components/dashboard/RegisterBatchForm.tsx
+       1 "use client";
+       2 
+       4 import { CameraIcon, HandPlantingSeedIcon, QualityBadgeIcon, Rob
+         otInspectIcon } from "@/components/icons/CartoonIcons";
+       5 import { Panel } from "@/components/ui/Panel";
+       7 import { CROP_EMOJI, formatTokens, gradeClasses } from "@/lib/st
+         atus";
+       8 import { CROP_TYPES, type Batch, type CropType, type QualityRepo
+       9 
+      10 const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+     … +451 lines (ctrl+o to expand)
+
+⏺ Now the batch timeline and the batch card.
+
+⏺ Write(frontend/components/dashboard/BatchTimeline.tsx)
+  ⎿  Wrote 122 lines to frontend/components/dashboard/BatchTimeline.tsx
+       1 import { LIFECYCLE, STATUS_META, formatDate, statusIndex } from 
+       2 import type { BatchStatus, TimelineEvent } from "@/lib/types";
+       3 
+       4 /**
+       6  *
+       7  * Rather than a list of dates, the journey is drawn: a track of
+       8  * the road filling in behind the produce as it moves. Steps tha
+         t have happened
+       9  * are in full colour; steps still ahead are faded but still sho
+      10  * a farmer can see what comes next without reading anything.
+     … +136 lines (ctrl+o to expand)
+
+⏺ Write(frontend/components/dashboard/BatchCard.tsx)
+  ⎿  Wrote 211 lines to frontend/components/dashboard/BatchCard.tsx
+       1 "use client";
+       2 
+       3 import { useState } from "react";
+       4 import { BatchTimeline, TimelineLog } from "./BatchTimeline";
+       5 import { StatusMedallion } from "@/components/ui/StatusPill";
+         m "@/components/icons/CartoonIcons";
+       7 import {
+       8   ADVANCE_LABEL,
+       9   CROP_EMOJI,
+      10   NEXT_STATUS,
+     … +243 lines (ctrl+o to expand)
+
+⏺ Write(frontend/components/dashboard/BatchList.tsx)
+  ⎿  Wrote 194 lines to frontend/components/dashboard/BatchList.tsx
+       1 "use client";
+       2 
+       4 import { BatchCard } from "./BatchCard";
+       5 import { Panel, EmptyState, PanelSkeleton, ErrorNote } from "@/c
+         omponents/ui/Panel";
+         m "@/components/icons/CartoonIcons";
+       7 import { STATUS_META, formatNumber } from "@/lib/status";
+       8 import { BATCH_STATUSES, type Batch, type BatchStatus } from "@/
+       9 
+      10 type Filter = "ALL" | BatchStatus;
+     … +205 lines (ctrl+o to expand)
+
+⏺ Now the wallet module and the traceability map.
+
+⏺ Write(frontend/components/dashboard/FarmerWallet.tsx)
+  ⎿  Wrote 156 lines to frontend/components/dashboard/FarmerWallet.tsx
+       1 "use client";
+       3 import { Panel, EmptyState, PanelSkeleton, ErrorNote } from "@/c
+       4 import { CoinBasketIcon, HandshakeCoinIcon, ScarecrowIcon } from
+          "@/components/icons/CartoonIcons";
+         lib/status";
+         } from "@/lib/types";
+       8 /** Money statuses get their own tiny vocabulary — pending money
+          is not spent money. */
+          label: string; dot: string }> = {
+          label: "Pending", dot: "bg-sunny-400" },
+     … +191 lines (ctrl+o to expand)
+
+⏺ Write(frontend/components/dashboard/TraceabilityMap.tsx)
+  ⎿  Wrote 290 lines to frontend/components/dashboard/TraceabilityMap.tsx
+       1 "use client";
+       2 
+       3 import { useMemo, useState } from "react";
+       4 import { Panel, EmptyState, PanelSkeleton, ErrorNote } from "@/c
+         omponents/ui/Panel";
+       6   DeliveryTruckIcon,
+       7   GlobeTruckLeafIcon,
+       8   MapPinIcon,
+       9   ScarecrowIcon,
+      10 } from "@/components/icons/CartoonIcons";
+     … +340 lines (ctrl+o to expand)
+
+⏺ Now the wallet hook and the dashboard page that wires it all together.
+
+⏺ Write(frontend/lib/useWallet.ts)
+  ⎿  Wrote 119 lines to frontend/lib/useWallet.ts
+       1 "use client";
+       2 
+       3 import { useCallback, useEffect, useState } from "react";
+       5 /**
+       6  * Minimal EIP-1193 surface. Typing only what we use keeps this 
+         honest — the
+       7  * dashboard genuinely needs nothing beyond account access.
+       9 interface Eip1193Provider {
+      10   request: (args: { method: string; params?: unknown[] }) => Pro
+         mise<unknown>;
+     … +126 lines (ctrl+o to expand)
+
+⏺ Write(frontend/app/page.tsx)
+  ⎿  Wrote 344 lines to frontend/app/page.tsx
+       1 "use client";
+       2 
+       4 import { Header } from "@/components/layout/Header";
+       5 import { RegisterBatchForm } from "@/components/dashboard/Regist
+         erBatchForm";
+       7 import { FarmerWallet } from "@/components/dashboard/FarmerWalle
+         t";
+       8 import { TraceabilityMap } from "@/components/dashboard/Traceabi
+       9 import { StatTile } from "@/components/ui/Panel";
+      10 import {
+     … +390 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Typecheck is clean. One rendering issue to fix first: the map pins nest an
+  <svg> inside the map <svg> without sizing, which won't render reliably. Moving
+  pins to an HTML overlay — also makes them real focusable buttons.
+
+⏺ Update(frontend/components/dashboard/TraceabilityMap.tsx)
+  ⎿  Added 3 lines, removed 2 lines
+      124          ) : null
+      125        ) : (
+      126          <div className="space-y-4">
+      127 -          {/* The map */}                                     
+      128 -          <div className="overflow-hidden rounded-cartoon bord
+          -er-[3px] border-sky-200 bg-sky-50">                           
+      127 +          {/* The map. The illustrated backdrop and the routes
+          + are SVG; the pins                                            
+      128 +              sit on top as real buttons so they can be tabbed
+          + to and tapped. */}                                           
+      129 +          <div className="relative overflow-hidden rounded-car
+          +toon border-[3px] border-sky-200 bg-sky-50">                  
+      130              <svg
+      131                viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+      132                className="h-auto w-full"
+
+⏺ Update(frontend/components/dashboard/TraceabilityMap.tsx)
+  ⎿  Added 44 lines, removed 33 lines
+      167                        fill="none"
+      168                        opacity={selected && selected !== point.
+           batchCode ? 0.25 : 0.85}
+      169                      />
+      170 -                    <circle cx={from.x} cy={from.y} r="1.3" fi
+          -ll="#955636" />                                               
+      170 +                    {/* The farm end of the journey */}       
+      171 +                    <circle cx={from.x} cy={from.y} r="1.4" fi
+          +ll="#955636" stroke="#fbf7f1" strokeWidth="0.5" />            
+      172                    </g>
+      173                  ) : null,
+      174                )}
+      175  
+      175 -              {/* Pins */}                                    
+      176 -              {plotted.map(({ point, to }) => {               
+      177 -                const meta = STATUS_META[point.status];       
+      178 -                const isActive = selected === point.batchCode;
+      179 -                const dimmed = selected != null && !isActive; 
+      180 -                                                              
+      181 -                return (                                      
+      182 -                  <g                                          
+      183 -                    key={point.batchCode}                     
+      184 -                    transform={`translate(${to.x} ${to.y})`}  
+      185 -                    onClick={() => setSelected(isActive ? null
+          - : point.batchCode)}                                          
+      186 -                    className="cursor-pointer transition-opaci
+          -ty"                                                           
+      187 -                    opacity={dimmed ? 0.4 : 1}                
+      188 -                  >                                           
+      189 -                    <ellipse cx="0" cy="0.8" rx="3.4" ry="1.1"
+          - fill="#145127" opacity="0.18" />                             
+      190 -                    <circle                                   
+      191 -                      cx="0"                                  
+      192 -                      cy="-3.6"                               
+      193 -                      r={isActive ? 4.2 : 3.4}                
+      194 -                      fill="#ffffff"                          
+      195 -                      stroke={isActive ? "#16a03a" : "#ffffff"
+          -}                                                             
+      196 -                      strokeWidth="0.8"                       
+      197 -                      className="transition-all duration-200" 
+      198 -                    />                                        
+      199 -                    <path d="M0 0 L-1.5 -3 L1.5 -3 Z" fill="#f
+          -fffff" />                                                     
+      200 -                    <g transform="translate(-2.6 -6.2) scale(0
+          -.11)">                                                        
+      201 -                      <meta.Icon className="" />              
+      202 -                    </g>                                      
+      203 -                    <title>{`${point.batchCode} — ${meta.label
+          -}`}</title>                                                   
+      204 -                  </g>                                        
+      205 -                );                                            
+      206 -              })}                                             
+      176 +              {/* Ground shadow under each pin, so the overlay
+          + reads as planted                                             
+      177 +                  on the map rather than floating above it. */
+          +}                                                             
+      178 +              {plotted.map(({ point, to }) => (               
+      179 +                <ellipse                                      
+      180 +                  key={`shadow-${point.batchCode}`}           
+      181 +                  cx={to.x}                                   
+      182 +                  cy={to.y}                                   
+      183 +                  rx="3"                                      
+      184 +                  ry="1"                                      
+      185 +                  fill="#145127"                              
+      186 +                  opacity={selected && selected !== point.batc
+          +hCode ? 0.08 : 0.2}                                           
+      187 +                />                                            
+      188 +              ))}                                             
+      189              </svg>
+      190 +                                                              
+      191 +            {/* Pins */}                                      
+      192 +            {plotted.map(({ point, to }) => {                 
+      193 +              const meta = STATUS_META[point.status];         
+      194 +              const isActive = selected === point.batchCode;  
+      195 +              const dimmed = selected != null && !isActive;   
+      196 +                                                              
+      197 +              return (                                        
+      198 +                <button                                       
+      199 +                  key={point.batchCode}                       
+      200 +                  type="button"                               
+      201 +                  onClick={() => setSelected(isActive ? null :
+          + point.batchCode)}                                            
+      202 +                  title={`${point.batchCode} — ${meta.label}`}
+      203 +                  aria-pressed={isActive}                     
+      204 +                  style={{                                    
+      205 +                    left: `${(to.x / VIEW.width) * 100}%`,    
+      206 +                    top: `${(to.y / VIEW.height) * 100}%`,    
+      207 +                  }}                                          
+      208 +                  className={`group absolute -translate-x-1/2 
+          +-translate-y-full rounded-full border-[3px] bg-white p-1 shado
+          +w-cartoon-sm transition-all duration-200 hover:scale-110 activ
+          +e:scale-95 ${                                                 
+      209 +                    isActive ? "border-leaf-500 ring-4 ring-le
+          +af-200" : "border-white"                                      
+      210 +                  } ${dimmed ? "opacity-45" : "opacity-100"}`}
+      211 +                >                                             
+      212 +                  <meta.Icon className="h-6 w-6 sm:h-8 sm:w-8"
+          + />                                                           
+      213 +                  <span className="sr-only">                  
+      214 +                    {point.batchCode} — {meta.label}          
+      215 +                  </span>                                     
+      216 +                </button>                                     
+      217 +              );                                              
+      218 +            })}                                               
+      219            </div>
+      220  
+      221            {/* Selection detail */}
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Frontend builds clean. Marking it done and moving to deployment.
+
+  Ran 2 shell commands (ctrl+o to expand)
+⏺ Now the Dockerfiles. Starting with the three services.
+
+⏺ Write(backend/Dockerfile)
+  ⎿  Wrote 46 lines to backend/Dockerfile
+       1 # syntax=docker/dockerfile:1
+       2 
+         --------------
+       4 # Installed separately so a source-only change doesn't re-resolv
+         e the tree.
+       6 WORKDIR /app
+       7 COPY package.json package-lock.json ./
+       8 RUN npm ci
+      10 # ---- build ---------------------------------------------------
+         --------------
+     … +43 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Health endpoint confirmed at /health. Now the AI service and frontend
+  Dockerfiles.
+
+⏺ Write(ai-service/Dockerfile)
+  ⎿  Wrote 40 lines to ai-service/Dockerfile
+      1 # syntax=docker/dockerfile:1
+      2 
+      3 # ---- deps -----------------------------------------------------
+        -------------
+      4 # Wheels are built into a venv here so the runtime stage needs no
+      5 FROM python:3.12-slim AS deps
+      6 WORKDIR /app
+      7 
+      8 ENV PIP_NO_CACHE_DIR=1 \
+      9     PIP_DISABLE_PIP_VERSION_CHECK=1
+     … +35 lines (ctrl+o to expand)
+
+⏺ Update(backend/Dockerfile)
+  ⎿  Added 2 lines, removed 3 lines
+      32  COPY --from=build /app/dist ./dist
+      33  COPY package.json ./
+      34  
+      35 -# The seed script is TypeScript, so keep the sources for `npm r
+         -un seed`.                                                      
+      36 -COPY src ./src                                                 
+      37 -COPY tsconfig.json ./                                          
+      35 +# The seeder ships compiled (dist/scripts/seed.js) so the runti
+         +me image needs no                                              
+      36 +# dev dependencies: `docker compose run --rm backend node dist/
+         +scripts/seed.js`.                                              
+      37  
+      38  USER node
+      39  EXPOSE 4000
+
+⏺ Write(frontend/Dockerfile)
+  ⎿  Wrote 48 lines to frontend/Dockerfile
+       1 # syntax=docker/dockerfile:1
+       2 
+       3 # ---- deps ----------------------------------------------------
+       4 FROM node:22-alpine AS deps
+       5 WORKDIR /app
+       6 COPY package.json package-lock.json ./
+       7 RUN npm ci
+       9 # ---- build ---------------------------------------------------
+         --------------
+      10 FROM node:22-alpine AS build
+     … +44 lines (ctrl+o to expand)
+
+⏺ Write(contracts/Dockerfile)
+  ⎿  Wrote 31 lines to contracts/Dockerfile
+       1 # syntax=docker/dockerfile:1
+       2 #
+       3 # Local Polygon-compatible chain: a Hardhat node with the AgriSu
+       4 # contract deployed and seeded. This exists so `docker compose u
+         p` gives you a
+       5 # working blockchain without anyone installing Hardhat by hand.
+       6 
+       8 WORKDIR /app
+       9 
+      10 RUN apk add --no-cache tini curl
+     … +28 lines (ctrl+o to expand)
+
+⏺ Write(contracts/docker-entrypoint.sh)
+  ⎿  Wrote 46 lines to contracts/docker-entrypoint.sh
+       1 #!/bin/sh
+       2 # Boots the dev chain, deploys AgriSupplyChain, seeds a few batc
+       3 # in the foreground as the node process.
+       4 #
+       5 # Deployment happens *after* the node is up rather than in the i
+       6 # because a Hardhat node's state is in-memory: a contract deploy
+         ed at build time
+       7 # would not exist when the container starts.
+       9 
+      10 RPC_URL="${RPC_URL:-http://127.0.0.1:8545}"
+     … +44 lines (ctrl+o to expand)
+
+⏺ Now the env example files and the compose file.
+
+⏺ Write(backend/.env.example)
+  ⎿  Wrote 35 lines to backend/.env.example
+      1 # ---- Server ---------------------------------------------------
+        -------------
+      2 NODE_ENV=development
+      4 LOG_LEVEL=info
+      5 
+      6 # ---- MongoDB --------------------------------------------------
+        -------------
+        p` replaces
+      8 # 127.0.0.1 with `mongo`.
+      9 MONGO_URI=mongodb://127.0.0.1:27017/agrichain
+     … +36 lines (ctrl+o to expand)
+
+⏺ Write(frontend/.env.example)
+  ⎿  Wrote 9 lines to frontend/.env.example
+      1 # Base URL of the AgriChain API. `/api` is appended by lib/api.ts
+        .
+      2 #
+        s after a
+      4 # production build requires a rebuild — not just a restart.
+      5 NEXT_PUBLIC_API_URL=http://localhost:4000
+      6 
+        n-chain links.
+      8 NEXT_PUBLIC_CONTRACT_ADDRESS=
+      9 NEXT_PUBLIC_CHAIN_ID=31337
+     … +1 line (ctrl+o to expand)
+
+⏺ Write(ai-service/.env.example)
+  ⎿  Wrote 13 lines to ai-service/.env.example
+       1 # ---- Server --------------------------------------------------
+       2 # Read by uvicorn when started via `uvicorn app.main:app --host 
+         $HOST --port $PORT`.
+       4 PORT=8000
+       5 
+         --------------
+       7 # Largest photo the service will read, in bytes. Anything above 
+       8 MAX_UPLOAD_BYTES=8388608
+       9 
+         ALITY_THRESHOLD
+     … +9 lines (ctrl+o to expand)
+
+  Searched for 2 patterns, ran 1 shell command (ctrl+o to expand)
+
+⏺ The .env.example documents QUALITY_THRESHOLD, but the AI service hardcodes 60.
+  Wiring it up rather than documenting a dead knob.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Update(ai-service/app/scoring.py)
+  ⎿  Added 6 lines
+      13  
+      14  import hashlib
+      15  import math
+      16 +import os                                                      
+      17  import statistics
+      18  from dataclasses import dataclass, field
+      19  from datetime import datetime, timezone
+      20  
+      21  from .models import AssessmentResponse
+      22  
+      23 +# Score at or above which a batch is marked verified. Mirrors Q
+         +UALITY_THRESHOLD                                               
+      24 +# in the backend and `qualityThreshold` in AgriSupplyChain.sol 
+         +— the three must                                               
+      25 +# move together or the layers will disagree about what "verifie
+         +d" means.                                                      
+      26 +QUALITY_THRESHOLD = int(os.getenv("QUALITY_THRESHOLD", "60"))  
+      27  
+      28 +                                                               
+      29  @dataclass(frozen=True)
+      30  class CropProfile:
+      31      base_score: int
+
+⏺ Update(ai-service/app/scoring.py)
+  ⎿  Added 1 line, removed 1 line
+      122      fingerprint = _fingerprint(crop_type, image_bytes)
+      123  
+      124      score = _score_from_fingerprint(profile, fingerprint)
+      125 -    passed = score >= 60                                      
+      125 +    passed = score >= QUALITY_THRESHOLD                       
+      126  
+      127      # Images that carry no pixels (registration without a phot
+           o) are scored with
+      128      # lower confidence so callers can tell the difference at a
+            glance.
+
+⏺ Now the compose file orchestrating all five services.
+
+⏺ Write(docker-compose.yml)
+  ⎿  Wrote 142 lines to docker-compose.yml
+       1 # AgriChain Trace — full development environment.
+       2 #
+       3 #   docker compose up --build
+       4 #
+       5 # Brings up, in dependency order:
+       7 #   ai       → FastAPI quality assessment
+       8 #   chain    → Hardhat node with AgriSupplyChain deployed + seed
+         ed
+       9 #   backend  → Express API (waits for mongo + ai to be healthy)
+      10 #   frontend → Next.js farmer dashboard
+     … +151 lines (ctrl+o to expand)
+
+⏺ Now the .dockerignore files and root env template.
+
+⏺ Write(backend/.dockerignore)
+  ⎿  Wrote 12 lines to backend/.dockerignore
+       1 node_modules
+       2 dist
+       3 .env
+       4 .env.*
+       5 !.env.example
+       6 *.log
+       7 .DS_Store
+       8 .git
+       9 .gitignore
+      10 Dockerfile
+     … +2 lines (ctrl+o to expand)
+⏺ Write(frontend/.dockerignore)
+  ⎿  Wrote 12 lines to frontend/.dockerignore
+       1 node_modules
+       2 .next
+       3 out
+       4 .env
+       5 .env.*
+       6 !.env.example
+       7 *.log
+       8 .DS_Store
+       9 .git
+      10 .gitignore
+     … +2 lines (ctrl+o to expand)
+  ⎿  Read frontend/.dockerignore (13 lines)
+  ⎿  Read backend/.dockerignore (13 lines)
+  ⎿  Read docker-compose.yml (143 lines)
+  ⎿  Read ai-service/app/scoring.py (183 lines)
+  ⎿  Read ai-service/.env.example (14 lines)
+
+⏺ Write(ai-service/.dockerignore)
+  ⎿  Wrote 15 lines to ai-service/.dockerignore
+       1 __pycache__
+       2 *.pyc
+       3 .venv
+       4 venv
+       5 .env
+       6 .env.*
+       7 !.env.example
+       8 *.log
+       9 .DS_Store
+      10 .git
+     … +5 lines (ctrl+o to expand)
+
+  Read 2 files, listed 1 directory (ctrl+o to expand)
+
+⏺ Write(contracts/.dockerignore)
+  ⎿  Wrote 14 lines to contracts/.dockerignore
+       1 node_modules
+       2 artifacts
+       3 cache
+       4 typechain-types
+       5 deployments
+       6 .env
+       7 .env.*
+       8 !.env.example
+       9 *.log
+      10 .DS_Store
+     … +4 lines (ctrl+o to expand)
+
+  Read 2 files, listed 1 directory (ctrl+o to expand)
+
+⏺ Write(.env.example)
+  ⎿  Wrote 30 lines to .env.example
+       1 # Root environment file — read by `docker compose` only.
+       3 #   cp .env.example .env
+       4 #
+       5 # Each service also has its own .env.example for running it outs
+       6 #   backend/.env.example  frontend/.env.example  ai-service/.env
+         .example
+       8 
+       9 # ---- Frontend build ------------------------------------------
+         --------------
+         C_* values are
+     … +30 lines (ctrl+o to expand)
+
+⏺ Write(contracts/.env.example)
+  ⎿  Wrote 20 lines to contracts/.env.example
+       1 # ---- Local chain ---------------------------------------------
+       2 # RPC the `localhost` network targets for deploy:local / seed:lo
+       3 RPC_URL=http://127.0.0.1:8545
+       4 
+         ounts from.
+         ministic, so the
+          for real funds.
+       8 # DEV_MNEMONIC="test test test test test test test test test tes
+       9 
+         --------------
+     … +19 lines (ctrl+o to expand)
+
+  Searched for 3 patterns, read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ Write(README.md)
+  ⎿  Wrote 124 lines to README.md
+      1 # 🌱 AgriChain Trace
+      2 
+         batch, a photo
+      4 gets scored by an AI quality service, the batch is minted as an N
+        FT on a
+        buyer confirms
+      6 delivery. Every step is recorded on-chain and mirrored off-chain 
+        so the dashboard
+      8 
+      9 The whole stack runs with one command:
+     … +145 lines (ctrl+o to expand)
+
+⏺ Update(README.md)
+  ⎿  Added 147 lines
+      121  └── docker-compose.yml
+      122  ```
+      123  
+      124 +---                                                           
+      125 +                                                              
+      126 +## Running with Docker (recommended)                          
+      127 +                                                              
+      128 +**Prerequisites:** Docker Desktop (or Docker Engine 24+ with t
+          +he Compose plugin).                                           
+      129 +Nothing else — no Node, Python or Hardhat needed on the host. 
+      130 +                                                              
+      131 +```bash                                                       
+      132 +cp .env.example .env                                          
+      133 +docker compose up --build                                     
+      134 +```                                                           
+      135 +                                                              
+      136 +Compose brings the services up in dependency order and waits o
+          +n real                                                        
+      137 +healthchecks rather than sleeps:                              
+      138 +                                                              
+      139 +1. `mongo` — ready when `mongosh` answers a ping              
+      140 +2. `ai` — ready when `/health` returns 200                    
+      141 +3. `chain` — starts a Hardhat node, waits for the RPC, deploys
+      142 +   `AgriSupplyChain`, then seeds demo batches on-chain        
+      143 +4. `backend` — starts once mongo **and** ai are healthy       
+      144 +5. `frontend` — starts once the backend is healthy            
+      145 +                                                              
+      146 +| Service | URL |                                             
+      147 +| --- | --- |                                                 
+      148 +| Farmer dashboard | http://localhost:3000 |                  
+      149 +| API | http://localhost:4000/api |                           
+      150 +| API health | http://localhost:4000/health |                 
+      151 +| AI service docs | http://localhost:8000/docs |              
+      152 +| Chain RPC | http://localhost:8545 |                         
+      153 +| MongoDB | mongodb://localhost:27017/agrichain |             
+      154 +                                                              
+      155 +### Load the demo data                                        
+      156 +                                                              
+      157 +The database starts empty. Seed a farmer with five batches acr
+          +oss the lifecycle:                                            
+      158 +                                                              
+      159 +```bash                                                       
+      160 +docker compose run --rm seed                                  
+      161 +```                                                           
+      162 +                                                              
+      163 +The seeded farmer is **Anita Deshmukh**, wallet               
+      164 +`0x70997970c51812dc3a010c7d01b50e0d17dc79c8` — Hardhat account
+          + #1. The dashboard                                            
+      165 +falls back to exactly this address when no browser wallet is i
+          +njected, so                                                   
+      166 +"Connect Wallet" shows the seeded farm straight away.         
+      167 +                                                              
+      168 +### Turning on-chain writes on                                
+      169 +                                                              
+      170 +The chain container publishes its deployment to the host at   
+      171 +`contracts/deployments/localhost.json`. The backend needs the 
+          +address from it:                                              
+      172 +                                                              
+      173 +```bash                                                       
+      174 +# 1. read the freshly deployed address                        
+      175 +cat contracts/deployments/localhost.json | grep '"address"'   
+      176 +                                                              
+      177 +# 2. put it in .env (plus the dev key, already commented in .e
+          +nv.example)                                                   
+      178 +#    CONTRACT_ADDRESS=0x...                                   
+      179 +#    BACKEND_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944ba
+          +cb478cbed5efcae784d7bf4f2ff80                                 
+      180 +                                                              
+      181 +# 3. restart just the backend                                 
+      182 +docker compose up -d --force-recreate backend                 
+      183 +```                                                           
+      184 +                                                              
+      185 +Confirm it took:                                              
+      186 +                                                              
+      187 +```bash                                                       
+      188 +curl -s http://localhost:4000/api/health | grep -o '"enabled":
+          +[a-z]*'                                                       
+      189 +```                                                           
+      190 +                                                              
+      191 +`"enabled":true` means new batches mint an NFT and every statu
+          +s change writes a                                             
+      192 +transaction. A Hardhat node keeps its state in memory, so the 
+          +address changes                                               
+      193 +whenever the `chain` container restarts — redo the three steps
+          + if you recreate it.                                          
+      194 +                                                              
+      195 +### Useful compose commands                                   
+      196 +                                                              
+      197 +```bash                                                       
+      198 +docker compose logs -f backend        # follow one service    
+      199 +docker compose ps                     # health status of every
+          +thing                                                         
+      200 +docker compose up -d --build frontend # rebuild a single servi
+          +ce                                                            
+      201 +docker compose down                   # stop, keep the databas
+          +e                                                             
+      202 +docker compose down -v                # stop and wipe the data
+          +base volume                                                   
+      203 +```                                                           
+      204 +                                                              
+      205 +---                                                           
+      206 +                                                              
+      207 +## Running without Docker                                     
+      208 +                                                              
+      209 +Four terminals. Node 22+, Python 3.12+, and a local MongoDB (o
+          +r a connection                                                
+      210 +string to one) are required.                                  
+      211 +                                                              
+      212 +### 1. Chain                                                  
+      213 +                                                              
+      214 +```bash                                                       
+      215 +cd contracts                                                  
+      216 +npm install                                                   
+      217 +cp .env.example .env                                          
+      218 +npx hardhat node                       # terminal stays open, 
+          +RPC on :8545                                                  
+      219 +```                                                           
+      220 +                                                              
+      221 +In a second terminal, deploy and seed:                        
+      222 +                                                              
+      223 +```bash                                                       
+      224 +cd contracts                                                  
+      225 +npm run deploy:local                   # prints the address, w
+          +rites the ABI                                                 
+      226 +npm run seed:local                     # optional on-chain dem
+          +o batches                                                     
+      227 +```                                                           
+      228 +                                                              
+      229 +`deploy:local` publishes the address and ABI to three places s
+          +o nothing needs to                                            
+      230 +be copied by hand:                                            
+      231 +                                                              
+      232 +```                                                           
+      233 +contracts/deployments/localhost.json                          
+      234 +backend/src/contracts/AgriSupplyChain.json                    
+      235 +frontend/lib/contracts/AgriSupplyChain.json                   
+      236 +```                                                           
+      237 +                                                              
+      238 +It also grants `FARMER_ROLE`, `AI_VERIFIER_ROLE` and `DISTRIBU
+          +TOR_ROLE` to                                                  
+      239 +signers #1, #2 and #3 of the node (override with `FARMER_ADDRE
+          +SS`,                                                          
+      240 +`AI_VERIFIER_ADDRESS`, `DISTRIBUTOR_ADDRESS`).                
+      241 +                                                              
+      242 +### 2. AI service                                             
+      243 +                                                              
+      244 +```bash                                                       
+      245 +cd ai-service                                                 
+      246 +python -m venv .venv && source .venv/bin/activate             
+      247 +pip install -r requirements.txt                               
+      248 +cp .env.example .env                                          
+      249 +uvicorn app.main:app --reload --port 8000                     
+      250 +```                                                           
+      251 +                                                              
+      252 +### 3. Backend                                                
+      253 +                                                              
+      254 +```bash                                                       
+      255 +cd backend                                                    
+      256 +npm install                                                   
+      257 +cp .env.example .env                   # paste CONTRACT_ADDRES
+          +S from step 1                                                 
+      258 +npm run dev                            # tsx watch, restarts o
+          +n save                                                        
+      259 +npm run seed                           # demo farmer + 5 batch
+          +es                                                            
+      260 +```                                                           
+      261 +                                                              
+      262 +### 4. Frontend                                               
+      263 +                                                              
+      264 +```bash                                                       
+      265 +cd frontend                                                   
+      266 +npm install                                                   
+      267 +cp .env.example .env.local                                    
+      268 +npm run dev                            # http://localhost:3000
+      269 +```                                                           
+      270 +                                                              
+      271  <!-- README-CONT-1 -->
+
+⏺ Update(README.md)
+  ⎿  Added 155 lines
+      268  npm run dev                            # http://localhost:3000
+      269  ```
+      270  
+      271 +---                                                           
+      272 +                                                              
+      273 +## The smart contract                                         
+      274 +                                                              
+      275 +`contracts/contracts/AgriSupplyChain.sol` — an ERC-721 where *
+          +*one token is one                                             
+      276 +batch**. Built on OpenZeppelin 5 (`ERC721URIStorage`, `AccessC
+          +ontrol`,                                                      
+      277 +`ReentrancyGuard`), compiled for the **cancun** EVM target bec
+          +ause OZ 5 emits the                                           
+      278 +`mcopy` opcode. Polygon has supported it since the Napoli upgr
+          +ade.                                                          
+      279 +                                                              
+      280 +### Roles                                                     
+      281 +                                                              
+      282 +| Role | Held by | Can |                                      
+      283 +| --- | --- | --- |                                           
+      284 +| `DEFAULT_ADMIN_ROLE` | deployer | grant roles, tune the conf
+          +irmation window and quality threshold |                       
+      285 +| `FARMER_ROLE` | farmer accounts | register batches, list the
+          +m, cancel their own |                                         
+      286 +| `AI_VERIFIER_ROLE` | the backend, on behalf of the AI servic
+          +e | write quality attestations |                              
+      287 +| `DISTRIBUTOR_ROLE` | logistics accounts | move a batch to `I
+          +N_TRANSIT` |                                                  
+      288 +                                                              
+      289 +### Key functions                                             
+      290 +                                                              
+      291 +```solidity                                                   
+      292 +registerBatch(cropType, quantityKg, pricePerKg, origin, harves
+          +tDate, dataHash, metadataURI)                                 
+      293 +recordQualityAssessment(batchId, score, grade, reportHash)   /
+          +/ AI_VERIFIER_ROLE                                            
+      294 +updateStatus(batchId, newStatus, location, note)             /
+          +/ role-gated per transition                                   
+      295 +listOnMarket(batchId, pricePerKg)                            /
+          +/ owner or FARMER_ROLE                                        
+      296 +purchase(batchId)                                  payable   /
+          +/ funds the escrow                                            
+      297 +confirmReceipt(batchId, location)                            /
+          +/ buyer releases escrow                                       
+      298 +claimExpiredEscrow(batchId)                                  /
+          +/ seller claims after the window                              
+      299 +refundEscrow(batchId, reason)                                /
+          +/ admin unwinds a bad sale                                    
+      300 +getBatch(batchId) · getHistory(batchId) · getEscrow(batchId) ·
+          + getBatchesByFarmer(farmer)                                   
+      301 +```                                                           
+      302 +                                                              
+      303 +### Escrow                                                    
+      304 +                                                              
+      305 +`purchase` locks `quantityKg × pricePerKg` in the contract and
+          + starts a                                                     
+      306 +confirmation window. `confirmReceipt` releases it to the farme
+          +r and moves the                                               
+      307 +batch to `SOLD`. If the buyer never confirms, the farmer can c
+          +all                                                           
+      308 +`claimExpiredEscrow` once the window lapses — funds are never 
+          +trapped. Every                                                
+      309 +value-moving function is `nonReentrant`, and settlement uses a
+      310 +checks-effects-interactions order so the state is written befo
+          +re the transfer.                                              
+      311 +                                                              
+      312 +### Tests                                                     
+      313 +                                                              
+      314 +```bash                                                       
+      315 +cd contracts                                                  
+      316 +npm test                # 36 tests                            
+      317 +```                                                           
+      318 +                                                              
+      319 +Coverage spans role enforcement, every legal and illegal trans
+          +ition, the quality                                            
+      320 +threshold boundary, escrow happy path, expiry, refunds, and re
+          +entrancy.                                                     
+      321 +                                                              
+      322 +### Deploying to Polygon Amoy                                 
+      323 +                                                              
+      324 +```bash                                                       
+      325 +cd contracts                                                  
+      326 +# .env: DEPLOYER_PRIVATE_KEY=<throwaway key with test MATIC>  
+      327 +npm run deploy:amoy                                           
+      328 +```                                                           
+      329 +                                                              
+      330 +Get test MATIC from the Polygon faucet first. Use a key that h
+          +as never held real                                            
+      331 +funds.                                                        
+      332 +                                                              
+      333 +---                                                           
+      334 +                                                              
+      335 +## API reference                                              
+      336 +                                                              
+      337 +Base URL `http://localhost:4000/api`. Every response is envelo
+          +ped:                                                          
+      338 +                                                              
+      339 +```json                                                       
+      340 +{ "success": true, "data": { }, "chain": { "enabled": false } 
+          +}                                                             
+      341 +```                                                           
+      342 +                                                              
+      343 +Errors carry a machine-readable field list:                   
+      344 +                                                              
+      345 +```json                                                       
+      346 +{                                                             
+      347 +  "success": false,                                           
+      348 +  "error": "Validation failed",                               
+      349 +  "errors": [{ "path": "quantityKg", "message": "Quantity must
+          + be at least 1 kg" }]                                         
+      350 +}                                                             
+      351 +```                                                           
+      352 +                                                              
+      353 +### Batches                                                   
+      354 +                                                              
+      355 +| Method | Path | Purpose |                                   
+      356 +| --- | --- | --- |                                           
+      357 +| `POST` | `/register-batch` | Register a batch. `multipart/fo
+          +rm-data` with an optional `photo` — triggers the AI assessment
+          + inline. |                                                    
+      358 +| `GET` | `/get-batches` | List batches. Filters: `wallet`, `s
+          +tatus`, `cropType`, `search`, `page`, `limit`. |              
+      359 +| `GET` | `/batches` | Alias of `/get-batches`. |             
+      360 +| `GET` | `/batches/stats` | Counts by status, total weight, p
+          +ortfolio value. |                                             
+      361 +| `GET` | `/batches/crop-types` | The crop types the platform 
+          +accepts. |                                                    
+      362 +| `GET` | `/batches/:id` | One batch by id or batch code. |   
+      363 +| `POST` | `/update-status` | Advance a batch. Body: `batchId`
+          +, `status`, optional `location`, `note`. |                    
+      364 +| `PATCH` | `/batches/:batchId/status` | Same operation, REST-
+          +shaped. |                                                     
+      365 +| `POST` | `/batches/:batchId/assess` | Re-run the quality che
+          +ck with a new photo. |                                        
+      366 +                                                              
+      367 +### Farmers                                                   
+      368 +                                                              
+      369 +| Method | Path | Purpose |                                   
+      370 +| --- | --- | --- |                                           
+      371 +| `PUT` / `POST` | `/farmers` | Create or update a profile (up
+          +sert by wallet). |                                            
+      372 +| `GET` | `/farmers/:wallet` | Profile with batch counts. |   
+      373 +| `GET` | `/farmers/:wallet/wallet` | Balance, escrow total, l
+          +ifetime earnings, transactions. |                             
+      374 +| `GET` | `/farmers/:wallet/trace-map` | Origin and current lo
+          +cation per batch, for the map. |                              
+      375 +                                                              
+      376 +### Register a batch from the shell                           
+      377 +                                                              
+      378 +```bash                                                       
+      379 +curl -X POST http://localhost:4000/api/register-batch \       
+      380 +  -F "farmerWallet=0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+          + \                                                            
+      381 +  -F "cropType=Tomatoes" \                                    
+      382 +  -F "quantityKg=850" \                                       
+      383 +  -F "pricePerKg=24.5" \                                      
+      384 +  -F "origin[name]=Nashik, Maharashtra" \                     
+      385 +  -F "origin[lat]=19.9975" \                                  
+      386 +  -F "origin[lng]=73.7898" \                                  
+      387 +  -F "photo=@/path/to/tomatoes.jpg"                           
+      388 +```                                                           
+      389 +                                                              
+      390 +### AI service                                                
+      391 +                                                              
+      392 +| Method | Path | Purpose |                                   
+      393 +| --- | --- | --- |                                           
+      394 +| `GET` | `/health` | Liveness, model version, configured thre
+          +shold. |                                                      
+      395 +| `POST` | `/assess` | Score one photo. `multipart/form-data`:
+          + `crop_type`, `file`. |                                       
+      396 +| `POST` | `/assess/batch` | Score several batches from metada
+          +ta alone. |                                                   
+      397 +| `GET` | `/crops` | Known crop profiles and their scoring cha
+          +racteristics. |                                               
+      398 +                                                              
+      399 +```bash                                                       
+      400 +curl -X POST http://localhost:8000/assess \                   
+      401 +  -F "crop_type=Potatoes" -F "file=@potatoes.jpg"             
+      402 +```                                                           
+      403 +                                                              
+      404 +```json                                                       
+      405 +{                                                             
+      406 +  "quality_score": 92,                                        
+      407 +  "verified": true,                                           
+      408 +  "grade": "A",                                               
+      409 +  "details": "High grade, firm skin, minimal blemishes.",     
+      410 +  "defects": [],                                              
+      411 +  "ripeness": "firm, ready for market",                       
+      412 +  "moisture_pct": 81.4,                                       
+      413 +  "confidence": 0.91,                                         
+      414 +  "model_version": "agri-quality-sim-1.0.0",                  
+      415 +  "assessed_at": "2026-08-09T10:12:44.918Z"                   
+      416 +}                                                             
+      417 +```                                                           
+      418 +                                                              
+      419 +Scoring is a simulation, deliberately: there is no trained mod
+          +el behind it. Each                                            
+      420 +score is derived from a SHA-256 fingerprint of the crop type p
+          +lus the image                                                 
+      421 +bytes, so the same photo always returns the same report while 
+          +different photos                                              
+      422 +return different but plausible ones. Swapping in a real model 
+          +means replacing                                               
+      423 +`assess_image` in `ai-service/app/scoring.py` — the contract w
+          +ith the rest of the                                           
+      424 +stack stays exactly as it is.                                 
+      425 +                                                              
+      426  <!-- README-CONT-1 -->
+
+  Thought for 9s, searched for 1 pattern, read 3 files, ran 1 shell command (ctrl+o to expand)
+⏺ The frontend error parser doesn't match what the backend actually returns —
+  the API sends error: { message, details: [{ field, message }] }, so validation
+  messages would surface as "Request failed (400)". Fixing that.
+
+⏺ Update(frontend/lib/api.ts)
+  ⎿  Added 6 lines, removed 1 line
+      38    message?: string;
+      39    data: T;
+      40    meta?: Paged<unknown>["meta"];
+      41 -  errors?: Array<{ path?: string; message: string }>;          
+      41 +  /** Present only on failures — see `backend/src/middleware/er
+         +ror.ts`. */                                                    
+      42 +  error?: {                                                    
+      43 +    code?: string;                                             
+      44 +    message?: string;                                          
+      45 +    details?: Array<{ field?: string; message: string }>;      
+      46 +  };                                                           
+      47  }
+      48  
+      49  async function request<T>(path: string, init?: RequestInit): Pr
+          omise<Envelope<T>> {
+
+⏺ Update(frontend/lib/api.ts)
+  ⎿  Added 10 lines, removed 4 lines
+      66    const payload = text ? (JSON.parse(text) as Envelope<T>) : ({
+          } as Envelope<T>);
+      67  
+      68    if (!response.ok || payload.success === false) {
+      69 +    // Zod issues arrive as `error.details[{ field, message }]`
+         + — keyed by field so                                           
+      70 +    // the form can put each message under the input that cause
+         +d it.                                                          
+      71      const fieldErrors = Object.fromEntries(
+      70 -      (payload.errors ?? [])                                   
+      71 -        .filter((issue) => issue.path)                         
+      72 -        .map((issue) => [issue.path as string, issue.message]),
+      72 +      (payload.error?.details ?? [])                           
+      73 +        .filter((issue) => issue.field && issue.field !== "(roo
+         +t)")                                                           
+      74 +        .map((issue) => [issue.field as string, issue.message])
+         +,                                                              
+      75      );
+      74 -    throw new ApiError(payload.message ?? `Request failed (${re
+         -sponse.status}).`, response.status, fieldErrors);              
+      76 +    throw new ApiError(                                        
+      77 +      payload.error?.message ?? payload.message ?? `Request fai
+         +led (${response.status}).`,                                    
+      78 +      response.status,                                         
+      79 +      fieldErrors,                                             
+      80 +    );                                                         
+      81    }
+      82  
+      83    return payload;
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+⏺ The field-error keys line up with the Zod paths (quantityKg, pricePerKg). Now
+  finishing the README.
+
+⏺ Update(README.md)
+  ⎿  Added 161 lines, removed 1 line
+      423  `assess_image` in `ai-service/app/scoring.py` — the contract w
+           ith the rest of the
+      424  stack stays exactly as it is.
+      425  
+      426 -<!-- README-CONT-1 -->                                        
+      426 +---                                                           
+      427 +                                                              
+      428 +## Configuration                                              
+      429 +                                                              
+      430 +Every variable has a working default. Nothing has to be set to
+          + run the demo.                                                
+      431 +                                                              
+      432 +### `backend/.env`                                            
+      433 +                                                              
+      434 +| Variable | Default | Notes |                                
+      435 +| --- | --- | --- |                                           
+      436 +| `PORT` | `4000` | |                                         
+      437 +| `MONGO_URI` | `mongodb://127.0.0.1:27017/agrichain` | `mongo
+          +db://mongo:27017/agrichain` under compose |                   
+      438 +| `AI_SERVICE_URL` | `http://127.0.0.1:8000` | `http://ai:8000
+          +` under compose |                                             
+      439 +| `AI_REQUEST_TIMEOUT_MS` | `15000` | On timeout the API falls
+          + back to an offline report and flags `aiOnline: false` |      
+      440 +| `CORS_ORIGINS` | `http://localhost:3000` | Comma-separated |
+      441 +| `UPLOAD_MAX_BYTES` | `8388608` | 8 MB, matches the AI servic
+          +e and the browser-side check |                                
+      442 +| `RPC_URL` | `http://127.0.0.1:8545` | |                     
+      443 +| `CHAIN_ID` | `31337` | |                                    
+      444 +| `CONTRACT_ADDRESS` | *(empty)* | Empty disables chain writes
+          + |                                                            
+      445 +| `BACKEND_PRIVATE_KEY` | *(empty)* | Needs `AI_VERIFIER_ROLE`
+          + to write attestations |                                      
+      446 +| `LOG_LEVEL` | `info` | |                                    
+      447 +                                                              
+      448 +### `frontend/.env.local`                                     
+      449 +                                                              
+      450 +| Variable | Default | Notes |                                
+      451 +| --- | --- | --- |                                           
+      452 +| `NEXT_PUBLIC_API_URL` | `http://localhost:4000` | Inlined at
+          + build time — the browser calls it directly, so it must be hos
+          +t-reachable, never `http://backend:4000` |                    
+      453 +                                                              
+      454 +### `ai-service/.env`                                         
+      455 +                                                              
+      456 +| Variable | Default | Notes |                                
+      457 +| --- | --- | --- |                                           
+      458 +| `MAX_UPLOAD_BYTES` | `8388608` | Larger uploads get a `413` 
+          +|                                                             
+      459 +| `QUALITY_THRESHOLD` | `60` | |                              
+      460 +| `CORS_ORIGINS` | `*` | |                                    
+      461 +                                                              
+      462 +**One number lives in three places.** The verification thresho
+          +ld appears as                                                 
+      463 +`QUALITY_THRESHOLD` in `ai-service/app/scoring.py`, `QUALITY_T
+          +HRESHOLD` in                                                  
+      464 +`backend/src/domain/constants.ts`, and `qualityThreshold` in  
+      465 +`AgriSupplyChain.sol`. Change all three together or the layers
+          + will disagree                                                
+      466 +about what "verified" means.                                  
+      467 +                                                              
+      468 +---                                                           
+      469 +                                                              
+      470 +## Design system                                              
+      471 +                                                              
+      472 +The interface is built for someone who may not read fluently a
+          +nd may never have                                             
+      473 +used a wallet. That constraint drove the visual language.     
+      474 +                                                              
+      475 +**Palette** (`frontend/tailwind.config.ts`, 50–900 ramps each)
+          +:                                                             
+      476 +                                                              
+      477 +| Token | Role |                                              
+      478 +| --- | --- |                                                 
+      479 +| `leaf` | vibrant green — growth, primary actions, success | 
+      480 +| `earth` | rich brown — trust, structure, borders |          
+      481 +| `sunny` | warm yellow — attention, pending, warnings |      
+      482 +| `sky` | soft blue — information, transit, links |           
+      483 +| `soil` | neutral warm grey — text and surfaces |            
+      484 +                                                              
+      485 +**Type** — Baloo 2 for headings (rounded, friendly), Nunito fo
+          +r body (open                                                  
+      486 +counters, legible at small sizes). Both loaded via `next/font`
+          + as CSS variables.                                            
+      487 +                                                              
+      488 +**Shape** — `rounded-cartoon` (1.75rem) and `rounded-blob` (2.
+          +5rem), with                                                   
+      489 +`shadow-cartoon`: a hard offset shadow and no blur, so cards r
+          +ead like stickers                                             
+      490 +placed on the page rather than floating panes.                
+      491 +                                                              
+      492 +**Icons** — `frontend/components/icons/CartoonIcons.tsx`, arou
+          +nd 20 hand-authored                                           
+      493 +SVGs on a shared 48×48 grid with the palette baked in. Each on
+          +e is drawn                                                    
+      494 +*mid-action*: the tractor throws dust, the seed bursts with su
+          +nrays, the                                                    
+      495 +handshake has impact ticks. That is what makes them read as an
+          +imated while                                                  
+      496 +sitting perfectly still.                                      
+      497 +                                                              
+      498 +**Motion** — "animated but not in motion." Nothing loops on th
+          +e page by default.                                            
+      499 +Motion is a response to the user: `.icon-hover` scales an icon
+          + and adds a small                                             
+      500 +wiggle on hover, buttons scale up slightly on hover and press 
+          +*down* on click.                                              
+      501 +Ambient loops (`float-soft`, `sun-pulse`) are reserved for dec
+          +orative mascots.                                              
+      502 +A `prefers-reduced-motion` block in `globals.css` flattens eve
+          +ry duration to                                                
+      503 +near-zero.                                                    
+      504 +                                                              
+      505 +**Status is never colour alone** — each of the six statuses ha
+          +s its own                                                     
+      506 +illustration as well as its own colour, so the dashboard stays
+          + readable for                                                 
+      507 +anyone who perceives colour differently:                      
+      508 +                                                              
+      509 +| Status | Icon |                                             
+      510 +| --- | --- |                                                 
+      511 +| Planted | seedling breaking soil |                          
+      512 +| AI Quality Verified | robot inspecting a leaf with a magnifi
+          +er |                                                          
+      513 +| Listed on Market | market storefront with an awning |       
+      514 +| In Transit | delivery truck with motion ticks |             
+      515 +| Sold | handshake over a coin |                              
+      516 +| Cancelled | tipped-over crate |                             
+      517 +                                                              
+      518 +---                                                           
+      519 +                                                              
+      520 +## Testing and verification                                   
+      521 +                                                              
+      522 +```bash                                                       
+      523 +cd contracts   && npm test              # 36 passing          
+      524 +cd ai-service  && pytest                #  8 passing          
+      525 +cd backend     && npm run lint          # tsc --noEmit, clean 
+      526 +cd frontend    && npm run typecheck     # tsc --noEmit, clean 
+      527 +cd frontend    && npm run build         # production build    
+      528 +```                                                           
+      529 +                                                              
+      530 +The frontend build is the meaningful frontend gate: it typeche
+          +cks, compiles and                                             
+      531 +prerenders. Last run: compiled successfully, 4/4 static pages,
+          + `/` at 16.9 kB and                                           
+      532 +122 kB first-load JS.                                         
+      533 +                                                              
+      534 +---                                                           
+      535 +                                                              
+      536 +## Troubleshooting                                            
+      537 +                                                              
+      538 +**"Cannot reach the AgriChain server."** The dashboard says th
+          +is when the API is                                            
+      539 +unreachable. Check `docker compose ps` and `curl localhost:400
+          +0/health`.                                                    
+      540 +                                                              
+      541 +**Dashboard loads but every panel is empty.** The database is 
+          +empty. Run                                                    
+      542 +`docker compose run --rm seed`.                               
+      543 +                                                              
+      544 +**`chain.enabled` stays `false`.** `CONTRACT_ADDRESS` or `BACK
+          +END_PRIVATE_KEY` is                                           
+      545 +missing from the backend's environment. Set both in the root `
+          +.env`, then                                                   
+      546 +`docker compose up -d --force-recreate backend`.              
+      547 +                                                              
+      548 +**Quality reports say `aiOnline: false`.** The backend could n
+          +ot reach the AI                                               
+      549 +service inside `AI_REQUEST_TIMEOUT_MS`, so it wrote a determin
+          +istic offline                                                 
+      550 +report instead. Registration still succeeds — check `docker co
+          +mpose logs ai`.                                               
+      551 +                                                              
+      552 +**The contract address changed by itself.** Expected. A Hardha
+          +t node holds its                                              
+      553 +state in memory, so restarting the `chain` container redeploys
+          + at a new address.                                            
+      554 +Re-read `contracts/deployments/localhost.json`.               
+      555 +                                                              
+      556 +**`mcopy` / EVM version errors when compiling.** OpenZeppelin 
+          +5 requires the                                                
+      557 +cancun EVM target, already set in `hardhat.config.ts`. A stale
+          + cache can survive                                            
+      558 +a change here — `npx hardhat clean` then recompile.           
+      559 +                                                              
+      560 +**Port already in use.** Change the host side of the mapping i
+          +n                                                             
+      561 +`docker-compose.yml` (`"3001:3000"`). If you move the API port
+          +, update                                                      
+      562 +`NEXT_PUBLIC_API_URL` too and rebuild the frontend, since it i
+          +s inlined at build                                            
+      563 +time.                                                         
+      564 +                                                              
+      565 +---                                                           
+      566 +                                                              
+      567 +## Notes on scope                                             
+      568 +                                                              
+      569 +This is a complete, working system, with two parts deliberatel
+          +y simulated:                                                  
+      570 +                                                              
+      571 +- **Quality assessment** has no trained model. Scores come fro
+          +m a hash of the                                               
+      572 +  image bytes so they are stable, varied and plausible. The in
+          +tegration path —                                              
+      573 +  upload, score, attest on chain, display the grade — is real 
+          +end to end.                                                   
+      574 +- **The chain is local.** A Hardhat node stands in for Polygon
+          +. The contract is                                             
+      575 +  deployment-ready for Amoy or mainnet (`npm run deploy:amoy`)
+          +, and the frontend                                            
+      576 +  reads whatever address `deploy.ts` published.               
+      577 +                                                              
+      578 +Wallet handling is read-only: the dashboard reads the connecte
+          +d account via                                                 
+      579 +EIP-1193 and falls back to a known dev address for the demo. F
+          +armers do not sign                                            
+      580 +transactions from the browser — the backend holds the role-bea
+          +ring key. That                                                
+      581 +keeps the farmer's experience free of gas and seed phrases, at
+          + the cost of                                                  
+      582 +trusting the API operator. A production deployment would move 
+          +signing to the                                                
+      583 +farmer's own wallet or a session-key scheme.                  
+      584 +                                                              
+      585 +Development keys in this repo are the standard, public Hardhat
+          + dev keys. They are                                           
+      586 +worthless and deliberately visible. Never reuse them anywhere 
+          +real.                                                         
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+⏺ The model version in the README's sample response is wrong — it's
+  agri-vision-sim-1.2.0.
+
+⏺ Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      411    "ripeness": "firm, ready for market",
+      412    "moisture_pct": 81.4,
+      413    "confidence": 0.91,
+      414 -  "model_version": "agri-quality-sim-1.0.0",                  
+      414 +  "model_version": "agri-vision-sim-1.2.0",                   
+      415    "assessed_at": "2026-08-09T10:12:44.918Z"
+      416  }
+      417  ```
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+⏺ Write(.gitignore)
+  ⎿  Wrote 40 lines to .gitignore
+       1 # ---- secrets -------------------------------------------------
+         --------------
+       2 .env
+       4 !.env.example
+       5 
+       6 # ---- dependencies --------------------------------------------
+         --------------
+       8 .venv/
+       9 venv/
+      10 __pycache__/
+     … +37 lines (ctrl+o to expand)
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ The backend reads the ABI from disk at runtime, but nothing puts it inside the
+  backend container — chain writes would silently stay off even with
+  CONTRACT_ADDRESS set. Let me check the full path resolution.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ Two real gaps: tsc doesn't copy src/contracts/*.json into dist/, and the
+  backend image has no ABI at all. Making the lookup search real candidates.
+
+⏺ Update(backend/src/services/chain.service.ts)
+  ⎿  Added 15 lines, removed 1 line
+      20    abi: ethers.InterfaceAbi;
+      21  }
+      22  
+      23 -const ABI_PATH = path.resolve(__dirname, "../contracts/AgriSupp
+         -lyChain.json");                                                
+      23 +/**                                                            
+      24 + * Where the deploy script's output might be. Checked in order:
+      25 + *   1. CONTRACT_ABI_PATH        — explicit override (compose m
+         +ounts the chain's                                              
+      26 + *                                 deployments directory and po
+         +ints here)                                                     
+      27 + *   2. <dist|src>/contracts/    — written by contracts/scripts
+         +/deploy.ts                                                     
+      28 + *   3. ../src/contracts/        — running from dist/ without c
+         +opying JSON                                                    
+      29 + *   4. ../../contracts/deployments/localhost.json — a sibling 
+         +checkout                                                       
+      30 + */                                                            
+      31 +const ABI_CANDIDATES = [                                       
+      32 +  process.env.CONTRACT_ABI_PATH,                               
+      33 +  path.resolve(__dirname, "../contracts/AgriSupplyChain.json"),
+      34 +  path.resolve(__dirname, "../../src/contracts/AgriSupplyChain.
+         +json"),                                                        
+      35 +  path.resolve(process.cwd(), "src/contracts/AgriSupplyChain.js
+         +on"),                                                          
+      36 +  path.resolve(process.cwd(), "../contracts/deployments/localho
+         +st.json"),                                                     
+      37 +].filter((candidate): candidate is string => Boolean(candidate)
+         +);                                                             
+      38  
+      39  let provider: ethers.JsonRpcProvider | null = null;
+      40  let contract: ethers.Contract | null = null;
+
+⏺ Update(backend/src/services/chain.service.ts)
+  ⎿  Added 12 lines, removed 6 lines
+      41  let initialised = false;
+      42  
+      43  function loadDeployment(): DeploymentRecord | null {
+      44 -  if (!fs.existsSync(ABI_PATH)) return null;                   
+      45 -  try {                                                        
+      46 -    return JSON.parse(fs.readFileSync(ABI_PATH, "utf8")) as Dep
+         -loymentRecord;                                                 
+      47 -  } catch (error) {                                            
+      48 -    logger.warn({ err: error, path: ABI_PATH }, "Could not pars
+         -e contract artifact");                                         
+      49 -    return null;                                               
+      44 +  for (const candidate of ABI_CANDIDATES) {                    
+      45 +    if (!fs.existsSync(candidate)) continue;                   
+      46 +    try {                                                      
+      47 +      const record = JSON.parse(fs.readFileSync(candidate, "utf
+         +8")) as DeploymentRecord;                                      
+      48 +      if (record?.abi) {                                       
+      49 +        logger.info({ path: candidate }, "Loaded contract ABI")
+         +;                                                              
+      50 +        return record;                                         
+      51 +      }                                                        
+      52 +    } catch (error) {                                          
+      53 +      logger.warn({ err: error, path: candidate }, "Could not p
+         +arse contract artifact");                                      
+      54 +    }                                                          
+      55    }
+      56 +  return null;                                                 
+      57  }
+      58  
+      59  /** Lazily wires up provider + signer. Safe to call repeatedly.
+           */
+
+⏺ Update(backend/src/services/chain.service.ts)
+  ⎿  Added 1 line, removed 1 line
+      69    const deployment = loadDeployment();
+      70    if (!deployment?.abi) {
+      71      logger.warn(
+      72 -      { path: ABI_PATH },                                      
+      72 +      { searched: ABI_CANDIDATES },                            
+      73        "Chain bridge configured but no ABI found — run the contr
+          act deploy script first",
+      74      );
+      75      return;
+
+⏺ Now wire the compose backend to the deployment artefacts the chain container
+  already publishes.
+
+⏺ Update(docker-compose.yml)
+  ⎿  Added 5 lines
+       90        #   docker compose up -d --force-recreate backend
+       91        CONTRACT_ADDRESS: "${CONTRACT_ADDRESS:-}"
+       92        BACKEND_PRIVATE_KEY: "${BACKEND_PRIVATE_KEY:-}"
+       93 +      # The chain container writes its address + ABI here on e
+          +very boot, so the                                             
+       94 +      # backend reads the live artefact instead of one baked i
+          +nto the image.                                                
+       95 +      CONTRACT_ABI_PATH: /app/chain/localhost.json            
+       96 +    volumes:                                                  
+       97 +      - ./contracts/deployments:/app/chain:ro                 
+       98      ports:
+       99        - "4000:4000"
+      100      depends_on:
+
+  Read 2 files, ran 1 shell command (ctrl+o to expand)
+⏺ Update(backend/.env.example)
+  ⎿  Added 5 lines
+      33  CHAIN_ID=31337
+      34  CONTRACT_ADDRESS=
+      35  BACKEND_PRIVATE_KEY=
+      36 +                                                               
+      37 +# Where to read the deployed address + ABI from. Unset, the API
+         + looks in                                                      
+      38 +# src/contracts/AgriSupplyChain.json (written by contracts/scri
+         +pts/deploy.ts) and                                             
+      39 +# then ../contracts/deployments/localhost.json.                
+      40 +# CONTRACT_ABI_PATH=                                           
+
+⏺ Update(README.md)
+  ⎿  Added 1 line
+      443  | `CHAIN_ID` | `31337` | |
+      444  | `CONTRACT_ADDRESS` | *(empty)* | Empty disables chain writes
+            |
+      445  | `BACKEND_PRIVATE_KEY` | *(empty)* | Needs `AI_VERIFIER_ROLE`
+            to write attestations |
+      446 +| `CONTRACT_ABI_PATH` | *(unset)* | Explicit ABI location; oth
+          +erwise `src/contracts/` then `../contracts/deployments/localho
+          +st.json` are tried |                                          
+      447  | `LOG_LEVEL` | `info` | |
+      448  
+      449  ### `frontend/.env.local`
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ AgriChain Trace is complete. All five layers are built and verified.
+
+  Final piece — Docker orchestration + README:
+
+  - Four Dockerfiles (multi-stage, non-root, tini, healthchecks) plus
+  .dockerignore for each service
+  - docker-compose.yml — mongo → ai → chain → backend → frontend, ordered with
+  depends_on: condition: service_healthy rather than sleeps, and a tools-profile
+  seed service
+  - contracts/docker-entrypoint.sh — boots the Hardhat node, polls the RPC, then
+  deploys and seeds (a node's state is in-memory, so this can't happen at image
+  build)
+  - Root .env.example and one per service
+  - README.md (587 lines): quick start, manual setup, contract deployment, the
+  full API surface, configuration tables, the design system, testing, and
+  troubleshooting
+  - .gitignore covering secrets, build output, and Hardhat artefacts
+
+  Two real bugs found and fixed while verifying:
+
+  frontend/lib/api.ts parsed the wrong error shape. The backend returns error: {
+  message, details: [{ field, message }] }, but the client read
+  payload.errors[].path — so every validation failure surfaced as a generic
+  "Request failed (400)" instead of highlighting the offending field. Now it
+  reads details[].field, and the keys line up with the Zod paths the form uses.
+
+  backend/src/services/chain.service.ts resolved the ABI to a single hardcoded
+  path (dist/contracts/AgriSupplyChain.json) that tsc never populates and the
+  runtime image never contained. Chain writes would have stayed silently off in
+  Docker even with CONTRACT_ADDRESS set. It now searches an ordered candidate
+  list — a CONTRACT_ABI_PATH override first — and compose mounts the chain
+  container's deployments/ into the backend read-only, so the API reads the live
+  artefact from each boot rather than a stale copy.
+
+  Verification, all re-run after those changes:
+
+  ┌───────────┬─────────────────────────────────────────────────────────────┐
+  │   Layer   │                           Result                            │
+  ├───────────┼─────────────────────────────────────────────────────────────┤
+  │ Contracts │ 36/36 Hardhat tests passing                                 │
+  ├───────────┼─────────────────────────────────────────────────────────────┤
+  │ AI        │ 8/8 pytest passing (confirms the QUALITY_THRESHOLD edit)    │
+  │ service   │                                                             │
+  ├───────────┼─────────────────────────────────────────────────────────────┤
+  │ Backend   │ tsc --noEmit clean                                          │
+  ├───────────┼─────────────────────────────────────────────────────────────┤
+  │ Frontend  │ tsc --noEmit clean; build ✓, 4/4 static pages, / 16.9 kB /  │
+  │           │ 122 kB first load                                           │
+  ├───────────┼─────────────────────────────────────────────────────────────┤
+  │ Compose   │ docker compose config valid                                 │
+  └───────────┴─────────────────────────────────────────────────────────────┘
+
+  I did not run docker compose up --build end to end — that pulls images and
+  compiles four containers. The compose file validates and each stage's build
+  commands are the ones already verified natively, but the actual container boot
+  is unexercised.
+
+  Two things worth knowing about the design: browser wallet connection is
+  read-only, with the backend holding the role-bearing key, so farmers never see
+  gas or a seed phrase — the tradeoff is trusting the API operator, and
+  production would move signing to the farmer's wallet. And the verification
+  threshold lives in three places (scoring.py, constants.ts,
+  AgriSupplyChain.sol) which must move together; the README flags this.
+
+✻ Crunched for 45m 44s

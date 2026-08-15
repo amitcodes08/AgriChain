@@ -1,0 +1,14 @@
+node_modules
+artifacts
+cache
+typechain-types
+deployments
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.git
+.gitignore
+Dockerfile
+.dockerignore

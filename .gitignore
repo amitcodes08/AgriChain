@@ -1,0 +1,40 @@
+# ---- secrets ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# ---- dependencies ----------------------------------------------------------
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# ---- build output ----------------------------------------------------------
+dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# ---- hardhat ---------------------------------------------------------------
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+# Deployment records are generated per run and hold a throwaway local address.
+contracts/deployments/
+
+# Published ABI + address, written by scripts/deploy.ts.
+backend/src/contracts/AgriSupplyChain.json
+frontend/lib/contracts/AgriSupplyChain.json
+
+# ---- test + tooling --------------------------------------------------------
+coverage/
+.pytest_cache/
+.eslintcache
+
+# ---- editors / OS ----------------------------------------------------------
+.DS_Store
+*.log
+.idea/
+.vscode/

@@ -448,7 +448,6 @@ function WelcomeScreen({
             <button
               type="button"
               onClick={onConnectDemo}
-              disabled={connecting}
               className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-full border-2 border-sunny-300 bg-sunny-100/90 px-6 py-3 text-base font-extrabold text-sunny-900 shadow-glass transition-all duration-200 hover:scale-[1.03] hover:bg-sunny-200 hover:shadow-glow-sunny active:scale-[0.97]"
             >
               <TractorIcon className="h-6 w-6 shrink-0" />

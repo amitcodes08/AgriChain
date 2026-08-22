@@ -2,14 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-/**
- * Minimal EIP-1193 surface.
- */
 interface Eip1193Provider {
   request: (args: { method: string; params?: unknown[] | Record<string, unknown> }) => Promise<unknown>;
   on?: (event: string, handler: (...args: never[]) => void) => void;
   removeListener?: (event: string, handler: (...args: never[]) => void) => void;
   isMetaMask?: boolean;
+  providers?: Eip1193Provider[];
 }
 
 declare global {
@@ -27,11 +25,29 @@ const AMOY_CHAIN_ID_DEC = 80002;
  */
 export const DEMO_WALLET = "0x70997970c51812dc3a010c7d01b50e0d17dc79c8";
 
+/**
+ * Safely resolves the exact MetaMask provider even when multiple wallet extensions are installed.
+ */
+function getMetaMaskProvider(): Eip1193Provider | undefined {
+  if (typeof window === "undefined" || !window.ethereum) return undefined;
+
+  const eth = window.ethereum;
+
+  // Handle multi-wallet setups (e.g. MetaMask + Phantom + Coinbase)
+  if (Array.isArray(eth.providers) && eth.providers.length > 0) {
+    const mm = eth.providers.find((p) => p.isMetaMask && !("isPhantom" in p) && !("isBraveWallet" in p));
+    if (mm) return mm;
+    const anyMm = eth.providers.find((p) => p.isMetaMask);
+    if (anyMm) return anyMm;
+  }
+
+  return eth;
+}
+
 export interface WalletState {
   address: string | null;
   chainId: number | null;
   connecting: boolean;
-  /** True when the address came from an injected wallet rather than demo mode. */
   injected: boolean;
   isMetaMask: boolean;
   isCorrectNetwork: boolean;
@@ -51,19 +67,21 @@ export function useWallet(): WalletState {
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Check if MetaMask / Injected provider exists on mount
+  // Check provider on mount
   useEffect(() => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      setIsMetaMask(Boolean(window.ethereum.isMetaMask ?? true));
-      void window.ethereum.request({ method: "eth_chainId" }).then((id) => {
-        if (typeof id === "string") {
-          setChainId(parseInt(id, 16));
-        }
-      }).catch(() => undefined);
+    const provider = getMetaMaskProvider();
+    if (provider) {
+      setIsMetaMask(Boolean(provider.isMetaMask ?? true));
+      void provider
+        .request({ method: "eth_chainId" })
+        .then((id) => {
+          if (typeof id === "string") setChainId(parseInt(id, 16));
+        })
+        .catch(() => undefined);
     }
   }, []);
 
-  // Restore the previous session
+  // Restore saved session
   useEffect(() => {
     if (typeof window === "undefined") return;
     const saved = window.localStorage.getItem(STORAGE_KEY);
@@ -73,9 +91,9 @@ export function useWallet(): WalletState {
     }
   }, []);
 
-  // Listen to accounts and chain changes in injected wallet
+  // Listen to accounts & chain changes
   useEffect(() => {
-    const provider = typeof window !== "undefined" ? window.ethereum : undefined;
+    const provider = getMetaMaskProvider();
     if (!provider?.on || !provider.removeListener) return;
 
     const handleAccountsChanged = (...args: never[]) => {
@@ -94,9 +112,7 @@ export function useWallet(): WalletState {
 
     const handleChainChanged = (...args: never[]) => {
       const hexId = args[0] as unknown as string | undefined;
-      if (hexId) {
-        setChainId(parseInt(hexId, 16));
-      }
+      if (hexId) setChainId(parseInt(hexId, 16));
     };
 
     provider.on("accountsChanged", handleAccountsChanged);
@@ -109,7 +125,7 @@ export function useWallet(): WalletState {
   }, []);
 
   const switchToAmoy = useCallback(async () => {
-    const provider = window.ethereum;
+    const provider = getMetaMaskProvider();
     if (!provider) return;
 
     try {
@@ -119,7 +135,6 @@ export function useWallet(): WalletState {
       });
       setChainId(AMOY_CHAIN_ID_DEC);
     } catch (switchError: unknown) {
-      // 4902 indicates chain not added to wallet yet
       const errorObj = switchError as { code?: number };
       if (errorObj?.code === 4902) {
         try {
@@ -147,15 +162,39 @@ export function useWallet(): WalletState {
     setConnecting(true);
     setError(null);
 
-    const provider = window.ethereum;
+    const provider = getMetaMaskProvider();
     if (!provider) {
-      setError("MetaMask is not installed. Please install MetaMask extension or use the Demo Farm Account.");
+      setError("MetaMask extension was not detected in this browser. You can click 'Explore Demo Account' below to test immediately!");
       setConnecting(false);
       return;
     }
 
     try {
-      const accounts = (await provider.request({ method: "eth_requestAccounts" })) as string[];
+      // 1. First check if accounts are already unlocked/authorized
+      let accounts = (await provider.request({ method: "eth_accounts" }).catch(() => [])) as string[];
+
+      // 2. If not yet connected, request accounts with a timeout race
+      if (!accounts || accounts.length === 0) {
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("METAMASK_TIMEOUT")), 12000)
+        );
+
+        const requestPromise = provider.request({ method: "eth_requestAccounts" }) as Promise<string[]>;
+
+        try {
+          accounts = await Promise.race([requestPromise, timeoutPromise]);
+        } catch (raceErr: unknown) {
+          if (raceErr instanceof Error && raceErr.message === "METAMASK_TIMEOUT") {
+            setError(
+              "🦊 MetaMask notification is waiting! Please click the MetaMask extension icon in your browser toolbar to approve, or click 'Explore Demo Account' below."
+            );
+            setConnecting(false);
+            return;
+          }
+          throw raceErr;
+        }
+      }
+
       const account = accounts?.[0]?.toLowerCase();
 
       if (account) {
@@ -163,21 +202,24 @@ export function useWallet(): WalletState {
         setInjected(true);
         window.localStorage.setItem(STORAGE_KEY, account);
 
-        // Check and prompt network switch if not on Amoy
-        const currentChainHex = (await provider.request({ method: "eth_chainId" })) as string;
-        const currentDec = parseInt(currentChainHex, 16);
-        setChainId(currentDec);
-
-        if (currentDec !== AMOY_CHAIN_ID_DEC) {
-          void switchToAmoy();
+        // Check network
+        const currentChainHex = (await provider.request({ method: "eth_chainId" }).catch(() => null)) as string | null;
+        if (currentChainHex) {
+          const currentDec = parseInt(currentChainHex, 16);
+          setChainId(currentDec);
+          if (currentDec !== AMOY_CHAIN_ID_DEC) {
+            void switchToAmoy();
+          }
         }
       }
     } catch (err: unknown) {
       const errorObj = err as { code?: number; message?: string };
       if (errorObj?.code === 4001) {
-        setError("Connection rejected in MetaMask. You can try again or use the Demo Account.");
+        setError("MetaMask connection request was cancelled. You can try again or use the Demo Account.");
+      } else if (errorObj?.code === -32002) {
+        setError("A connection request is already pending in MetaMask. Please click your MetaMask extension icon to approve.");
       } else {
-        setError(errorObj?.message || "Failed to connect to MetaMask.");
+        setError(errorObj?.message || "Failed to connect to MetaMask. Please check your browser extension.");
       }
     } finally {
       setConnecting(false);
@@ -185,6 +227,7 @@ export function useWallet(): WalletState {
   }, [switchToAmoy]);
 
   const connectDemo = useCallback(() => {
+    setConnecting(false);
     setAddress(DEMO_WALLET);
     setInjected(false);
     setError(null);
@@ -192,6 +235,7 @@ export function useWallet(): WalletState {
   }, []);
 
   const disconnect = useCallback(() => {
+    setConnecting(false);
     setAddress(null);
     setInjected(false);
     setError(null);
@@ -217,4 +261,5 @@ export function useWallet(): WalletState {
     clearError,
   };
 }
+
 

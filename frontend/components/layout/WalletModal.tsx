@@ -124,7 +124,6 @@ export function WalletModal({
           {/* Option 2: Demo Farm Account */}
           <button
             type="button"
-            disabled={connecting}
             onClick={onConnectDemo}
             className="group relative flex w-full items-center gap-4 rounded-2xl border-2 border-sunny-200 bg-sunny-50/50 p-4 text-left shadow-sm transition-all duration-200 hover:border-sunny-400 hover:bg-sunny-100/60 hover:shadow-md active:scale-[0.99]"
           >

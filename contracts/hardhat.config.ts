@@ -13,7 +13,7 @@ const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.28",
     settings: {
-      optimizer: { enabled: true, runs: 200 },
+      optimizer: { enabled: true, runs: 1 },
       // OpenZeppelin 5.x uses the `mcopy` opcode, so the target must be Cancun or
       // later. Polygon has supported it since the Napoli upgrade.
       evmVersion: "cancun",
@@ -37,9 +37,10 @@ const config: HardhatUserConfig = {
       chainId: 31337,
     },
     amoy: {
-      url: process.env.AMOY_RPC_URL ?? "https://rpc-amoy.polygon.technology",
+      url: process.env.AMOY_RPC_URL ?? "https://polygon-amoy-bor-rpc.publicnode.com",
       chainId: 80002,
       accounts: [PRIVATE_KEY],
+      gasPrice: 35000000000, // 35 Gwei - satisfies Polygon minimum tip cap (25 Gwei)
     },
     polygon: {
       url: process.env.POLYGON_RPC_URL ?? "https://polygon-rpc.com",

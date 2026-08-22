@@ -14,19 +14,25 @@ import { shortenAddress } from "@/lib/status";
 export interface HeaderProps {
   wallet: string | null;
   connecting: boolean;
+  injected?: boolean;
+  isCorrectNetwork?: boolean;
   farmerName?: string | null;
   network?: string;
   onConnect: () => void;
   onDisconnect: () => void;
+  onSwitchNetwork?: () => void;
 }
 
 export function Header({
   wallet,
   connecting,
+  injected = false,
+  isCorrectNetwork = true,
   farmerName,
-  network = "Polygon (local)",
+  network = "Polygon Amoy",
   onConnect,
   onDisconnect,
+  onSwitchNetwork,
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-leaf-200/40 bg-white/60 backdrop-blur-2xl">
@@ -58,8 +64,8 @@ export function Header({
           </div>
         </div>
 
-        {/* Network badge — hidden on the smallest screens where space is precious */}
-        <div className="hidden items-center gap-2 rounded-full border border-sunny-200/50 bg-sunny-50/70 px-3 py-1.5 backdrop-blur-sm md:flex">
+        {/* Network badge */}
+        <div className="hidden items-center gap-2 rounded-full border border-sunny-200/50 bg-sunny-50/70 px-3 py-1.5 backdrop-blur-sm sm:flex">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sunny-400 opacity-60" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sunny-500" />
@@ -69,30 +75,43 @@ export function Header({
           </span>
         </div>
 
-        {/* Wallet */}
-        {wallet ? (
+        {/* Wrong network warning button */}
+        {wallet && !isCorrectNetwork ? (
           <button
             type="button"
-            onClick={onDisconnect}
-            title="Tap to disconnect"
-            className="group flex items-center gap-2.5 rounded-full border border-leaf-300/50 bg-white/70 py-1.5 pl-2 pr-4 shadow-glass backdrop-blur-sm transition-all duration-200 hover:scale-[1.03] hover:shadow-glow-leaf active:scale-[0.97]"
+            onClick={onSwitchNetwork}
+            className="flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-100/90 px-3 py-1.5 text-xs font-extrabold text-amber-900 shadow-sm transition-all hover:bg-amber-200"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-leaf-100/80">
-              <WalletPlugIcon className="h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
-            </span>
-            <span className="text-left leading-tight">
-              <span className="block text-[0.65rem] font-bold uppercase tracking-wide text-leaf-600">
-                Wallet Connected
-              </span>
-              <span className="block font-display text-sm font-extrabold text-leaf-900">
-                {shortenAddress(wallet)}
-              </span>
-            </span>
-            <span className="relative flex h-3 w-3">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf-400 opacity-40" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-leaf-500 ring-4 ring-leaf-200/50" />
-            </span>
+            <span>⚠️</span> Switch to Amoy
           </button>
+        ) : null}
+
+        {/* Wallet Pill / Connect Button */}
+        {wallet ? (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onDisconnect}
+              title="Click to disconnect or switch account"
+              className="group flex items-center gap-2.5 rounded-full border border-leaf-300/50 bg-white/80 py-1.5 pl-2 pr-4 shadow-glass backdrop-blur-sm transition-all duration-200 hover:scale-[1.03] hover:shadow-glow-leaf active:scale-[0.97]"
+            >
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-leaf-100/80">
+                <WalletPlugIcon className="h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
+              </span>
+              <span className="text-left leading-tight">
+                <span className="block text-[0.65rem] font-bold uppercase tracking-wide text-leaf-600">
+                  {injected ? "MetaMask" : "Demo Account"}
+                </span>
+                <span className="block font-display text-sm font-extrabold text-leaf-900">
+                  {shortenAddress(wallet)}
+                </span>
+              </span>
+              <span className="relative flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf-400 opacity-40" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-leaf-500 ring-4 ring-leaf-200/50" />
+              </span>
+            </button>
+          </div>
         ) : (
           <button type="button" onClick={onConnect} disabled={connecting} className="btn-primary group py-2.5">
             <WalletPlugIcon className="h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
@@ -103,3 +122,4 @@ export function Header({
     </header>
   );
 }
+

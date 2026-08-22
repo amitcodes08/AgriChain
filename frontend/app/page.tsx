@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
+import { WalletModal } from "@/components/layout/WalletModal";
 import { RegisterBatchForm } from "@/components/dashboard/RegisterBatchForm";
 import { BatchList } from "@/components/dashboard/BatchList";
 import { FarmerWallet } from "@/components/dashboard/FarmerWallet";
@@ -34,15 +35,12 @@ import type { Batch, BatchStats, Farmer, TraceMap, WalletSummary } from "@/lib/t
 
 /**
  * The Farmer Dashboard.
- *
- * All four modules read from one wallet address, so state lives here and flows
- * down: a status change updates the batch list, the wallet ledger and the map in
- * a single pass rather than leaving three views to disagree with each other.
  */
 export default function DashboardPage() {
   const wallet = useWallet();
   const address = wallet.address;
 
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [farmer, setFarmer] = useState<Farmer | null>(null);
   const [batches, setBatches] = useState<Batch[]>([]);
   const [stats, setStats] = useState<BatchStats | null>(null);
@@ -186,9 +184,31 @@ export default function DashboardPage() {
       <Header
         wallet={address}
         connecting={wallet.connecting}
+        injected={wallet.injected}
+        isCorrectNetwork={wallet.isCorrectNetwork}
         farmerName={farmer?.name}
-        onConnect={() => void wallet.connect()}
+        onConnect={() => setIsWalletModalOpen(true)}
         onDisconnect={wallet.disconnect}
+        onSwitchNetwork={() => void wallet.switchToAmoy()}
+      />
+
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        connecting={wallet.connecting}
+        isMetaMask={wallet.isMetaMask}
+        error={wallet.error}
+        onClose={() => {
+          setIsWalletModalOpen(false);
+          wallet.clearError();
+        }}
+        onConnectMetaMask={async () => {
+          await wallet.connectMetaMask();
+          setIsWalletModalOpen(false);
+        }}
+        onConnectDemo={() => {
+          wallet.connectDemo();
+          setIsWalletModalOpen(false);
+        }}
       />
 
       <main className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -235,7 +255,8 @@ export default function DashboardPage() {
           <WelcomeScreen
             connecting={wallet.connecting}
             error={wallet.error}
-            onConnect={() => void wallet.connect()}
+            onConnectMetaMask={() => void wallet.connectMetaMask()}
+            onConnectDemo={wallet.connectDemo}
           />
         )}
       </main>
@@ -338,11 +359,13 @@ function FarmSummary({ farmer, stats }: { farmer: Farmer | null; stats: BatchSta
 function WelcomeScreen({
   connecting,
   error,
-  onConnect,
+  onConnectMetaMask,
+  onConnectDemo,
 }: {
   connecting: boolean;
   error: string | null;
-  onConnect: () => void;
+  onConnectMetaMask: () => void;
+  onConnectDemo: () => void;
 }) {
   return (
     <div className="mt-4 space-y-8">
@@ -394,22 +417,51 @@ function WelcomeScreen({
             the payment safely held in escrow until it arrives.
           </p>
 
-          <button
-            type="button"
-            onClick={onConnect}
-            disabled={connecting}
-            className="btn-primary group mt-8 animate-glow-pulse px-8 py-4 text-lg"
-          >
-            <GrowingPlantFieldIcon className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
-            {connecting ? "Connecting…" : "Connect Wallet to Start"}
-          </button>
+          {/* Action Choice Buttons */}
+          <div className="mx-auto mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg">
+            {/* MetaMask Connect Button */}
+            <button
+              type="button"
+              onClick={onConnectMetaMask}
+              disabled={connecting}
+              className="btn-primary group w-full sm:w-auto animate-glow-pulse px-6 py-3.5 text-base flex items-center justify-center gap-3"
+            >
+              <svg viewBox="0 0 32 32" className="h-6 w-6 shrink-0" fill="none">
+                <path d="m27.1 5.3-1.6 4.7L21 8.8l-1.3-4.1 7.4.6z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m4.9 5.3 1.6 4.7L11 8.8l1.3-4.1-7.4.6z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m23.4 20.8-2.6 3.9-5-1.5.7-2.3 6.9-.1z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m8.6 20.8 2.6 3.9 5-1.5-.7-2.3-6.9-.1z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m11.2 14.5-2.2 1.1.7 2.4 2.8-.2-1.3-3.3z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m20.8 14.5 2.2 1.1-.7 2.4-2.8-.2 1.3-3.3z" fill="#E2761B" stroke="#E2761B" strokeWidth="0.5"/>
+                <path d="m11 8.8-4.5 1.2 2.7 7.9 2-3.4-.2-5.7z" fill="#E4761B"/>
+                <path d="m21 8.8 4.5 1.2-2.7 7.9-2-3.4.2-5.7z" fill="#E4761B"/>
+                <path d="m16 11.2-5 3.3.2 5.7 4.8 3.5 4.8-3.5.2-5.7-5-3.3z" fill="#F6851B"/>
+                <path d="m16 23.7-4.8-3.5-.7 2.3 2.6 3.9 2.9-2.7z" fill="#C0AD9E"/>
+                <path d="m16 23.7 4.8-3.5.7 2.3-2.6 3.9-2.9-2.7z" fill="#161616"/>
+                <path d="m16 11.2 5-3.3 1.3 4.1-6.3-.8z" fill="#763D16"/>
+                <path d="m16 11.2-5-3.3-1.3 4.1 6.3-.8z" fill="#763D16"/>
+              </svg>
+              <span>{connecting ? "Opening MetaMask…" : "Connect with MetaMask"}</span>
+            </button>
 
-          <p className="mt-3 text-xs font-semibold text-soil-400">
-            No wallet installed? You will be signed in to the demo farm account instead.
+            {/* Demo Account Button */}
+            <button
+              type="button"
+              onClick={onConnectDemo}
+              disabled={connecting}
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-full border-2 border-sunny-300 bg-sunny-100/90 px-6 py-3 text-base font-extrabold text-sunny-900 shadow-glass transition-all duration-200 hover:scale-[1.03] hover:bg-sunny-200 hover:shadow-glow-sunny active:scale-[0.97]"
+            >
+              <TractorIcon className="h-6 w-6 shrink-0" />
+              <span>Explore Demo Account</span>
+            </button>
+          </div>
+
+          <p className="mt-4 text-xs font-semibold text-soil-400">
+            Deployed on Polygon Amoy Testnet · One-click demo available with Anita Deshmukh&apos;s farm.
           </p>
 
           {error ? (
-            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-sunny-200/50 bg-sunny-100/60 px-4 py-2 text-sm font-bold text-sunny-900 backdrop-blur-sm">
+            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 shadow-sm">
               {error}
             </p>
           ) : null}

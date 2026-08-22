@@ -23,8 +23,19 @@ export const putFarmer = asyncHandler(async (req: Request, res: Response) => {
 export const getFarmer = asyncHandler(async (req: Request, res: Response) => {
   const { wallet } = walletParamSchema.parse(req.params);
 
-  const farmer = await FarmerModel.findOne({ walletAddress: wallet });
-  if (!farmer) throw notFound(`No farmer profile for ${wallet}.`);
+  let farmer = await FarmerModel.findOne({ walletAddress: wallet });
+  if (!farmer) {
+    // Auto-provision a default profile for newly connected Web3 wallets
+    farmer = await FarmerModel.create({
+      walletAddress: wallet,
+      name: `Farmer ${wallet.slice(0, 6)}...${wallet.slice(-4)}`,
+      village: "Farm Field",
+      district: "Nashik",
+      state: "Maharashtra",
+      farmSizeAcres: 5,
+      balance: 0,
+    });
+  }
 
   res.json({ success: true, data: farmer });
 });
@@ -39,8 +50,18 @@ export const getWallet = asyncHandler(async (req: Request, res: Response) => {
   const { wallet } = walletParamSchema.parse(req.params);
   const limit = Math.min(Number(req.query.limit ?? 20), 100);
 
-  const farmer = await FarmerModel.findOne({ walletAddress: wallet });
-  if (!farmer) throw notFound(`No farmer profile for ${wallet}.`);
+  let farmer = await FarmerModel.findOne({ walletAddress: wallet });
+  if (!farmer) {
+    farmer = await FarmerModel.create({
+      walletAddress: wallet,
+      name: `Farmer ${wallet.slice(0, 6)}...${wallet.slice(-4)}`,
+      village: "Farm Field",
+      district: "Nashik",
+      state: "Maharashtra",
+      farmSizeAcres: 5,
+      balance: 0,
+    });
+  }
 
   const [transactions, aggregates] = await Promise.all([
     TransactionModel.find({ farmerWallet: wallet }).sort({ occurredAt: -1 }).limit(limit).lean(),
@@ -60,7 +81,7 @@ export const getWallet = asyncHandler(async (req: Request, res: Response) => {
     data: {
       walletAddress: wallet,
       currency: CURRENCY,
-      balance: Number(farmer.balance.toFixed(2)),
+      balance: Number((farmer.balance ?? 0).toFixed(2)),
       pending: byStatus.PENDING?.total ?? 0,
       lifetimeEarnings: byStatus.COMPLETED?.total ?? 0,
       counts: {
